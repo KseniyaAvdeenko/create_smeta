@@ -1,0 +1,8 @@
+{
+    "scripts": {
+      "start": "npm run dev-react && npm run dev-electron",
+      "dev-electron": "cd backend && npm run move-build && npm run start:dev",
+      "dev-react": "cd client && npm run build && cd ../backend && npm run move-build",
+      "build": "cd client && npm run build && cd ../backend && npm run move-build && npm run make"
+    }
+  }

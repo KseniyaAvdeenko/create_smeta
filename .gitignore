@@ -1,0 +1,8 @@
+.idea
+backend/node_modules
+backend/out
+client/node_modules
+backend/.env
+client/.env
+node_modules
+db.drawio.png
