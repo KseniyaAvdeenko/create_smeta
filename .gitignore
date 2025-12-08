@@ -6,3 +6,4 @@ backend/.env
 client/.env
 node_modules
 db.drawio.png
+/backend/smeta-service-account.json
