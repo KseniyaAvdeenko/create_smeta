@@ -2,81 +2,77 @@ const {BrowserWindow, Menu, screen} = require("electron");
 const path = require('node:path');
 const isOnline = require("@esm2cjs/is-online").default;
 const installExtension = require('electron-devtools-installer');
-
+const dbHandler = require('./db.handler');
 
 async function createMainWindow() {
     const primaryDisplay = screen.getPrimaryDisplay()
     const {width, height} = primaryDisplay.workAreaSize;
-    const mainWindow = new BrowserWindow({
-        width: width - 20,
-        title: 'ks-analytics',
-        height: height - 20,
-        // show: false,
-        show: true,
-        resizable: true,
-        transparent: true,
-        backgroundColor: "#000000",
-        hasShadow: true,
-        roundedCorners: true,
-        webPreferences: {
-            preload: path.join(__dirname, '../preload.js'),
-            contextIsolation: true,
-            nodeIntegration: false,
-            devTools: true,
-        },
-    });
-
-    // const preloading = new BrowserWindow({
-    //     width: 800,
-    //     height: 600,
-    //     transparent: true,
+    // const mainWindow = new BrowserWindow({
+    //     width: width - 20,
+    //     title: 'Smeta Generation',
+    //     height: height - 20,
+    //     // show: false,
     //     show: true,
-    //     parent: mainWindow,
-    //     title: 'ks-analytics',
-    //     autoHideMenuBar: true,
-    //     // frame: false,
-    //     // resizable: false,
-    //     skipTaskbar: true,
+    //     resizable: true,
+    //     transparent: true,
     //     backgroundColor: "#000000",
     //     hasShadow: true,
     //     roundedCorners: true,
-    //     frame: true,
-    //     alwaysOnTop: true,
     //     webPreferences: {
     //         preload: path.join(__dirname, '../preload.js'),
     //         contextIsolation: true,
     //         nodeIntegration: false,
-    //         devTools: false
+    //         devTools: true,
     //     },
-    // })
-    //
-    // preloading.loadFile(path.join(__dirname, '../preload.html'))
-    // preloading.center()
+    // });
+
+    const preloading = new BrowserWindow({
+        width: 800,
+        height: 600,
+        transparent: true,
+        show: true,
+        parent: mainWindow,
+        title: 'Smeta Generation',
+        autoHideMenuBar: true,
+        // frame: false,
+        // resizable: false,
+        skipTaskbar: true,
+        backgroundColor: "#000000",
+        hasShadow: true,
+        roundedCorners: true,
+        frame: true,
+        alwaysOnTop: true,
+        webPreferences: {
+            preload: path.join(__dirname, '../preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
+            devTools: false
+        },
+    })
+    
+    preloading.loadFile(path.join(__dirname, '../preload.html'))
+    preloading.center()
 
 
-    const [disk, folder1, folder2, prodFolder] = path.join(__dirname, '').split('\\')
-    const mainWindowPath = disk + '\\' + folder1 + '\\' + folder2 + '\\' + prodFolder + '\\' + 'client\\build\\index.html'
-    mainWindow.loadURL(path.join(__dirname, '../build/index.html'));
-    mainWindow.center()
-    mainWindow.setBackgroundMaterial('acrylic')
+    // const [disk, folder1, folder2, prodFolder] = path.join(__dirname, '').split('\\')
+    // const mainWindowPath = disk + '\\' + folder1 + '\\' + folder2 + '\\' + prodFolder + '\\' + 'client\\build\\index.html'
+    // mainWindow.loadURL(path.join(__dirname, '../build/index.html'));
+    // mainWindow.center()
+    // mainWindow.setBackgroundMaterial('acrylic')
 
-    Menu.setApplicationMenu(null);
+    // Menu.setApplicationMenu(null);
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+// mainWindow.webContents.openDevTools();
     //preloading.webContents.openDevTools();
     // -------------------------------------
 
     // const openMainWindow = () => {
     //     preloading.close()
-    //     mainWindow.center()
-    //     mainWindow.show()
+    //     // mainWindow.center()
+    //     // mainWindow.show()
     // }
-    //
-    // await isOnline()
-    // && await dbHandler.getConnectionToDB('pages')
-    // && await dbHandler.getConnectionToDB('competitors')
-    // && await dbHandler.getConnectionToSqlDB()
-    // && await dbHandler.getConnectionToDB('pages_USP')
+    
+    // await isOnline() && await dbHandler.getDbConnection()
     //     ? setTimeout(openMainWindow, 3000)
     //     : setTimeout(openMainWindow, 5000)
 

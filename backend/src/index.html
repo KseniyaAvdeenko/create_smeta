@@ -21,7 +21,7 @@
     <div id="title">Smeta Generation</div>
     <div class="connections">
         <div class="connections__item" id="connectionOnline">Интернет подключен</div>
-        <div class="connections__item" id="connectionSql">База данных подключена</div>
+        <div class="connections__item" id="connectionDb">База данных подключена</div>
     </div>
     <div class="loader"></div>
 </div>
@@ -29,7 +29,7 @@
     class Preload {
         constructor() {
             this.connectionOnline = document.getElementById('connectionOnline');
-            this.connectionSql = document.getElementById('connectionSql');
+            this.connectionDb = document.getElementById('connectionDb');
         }
 
         itemVisibility(elem) {
@@ -39,10 +39,10 @@
         }
 
         async getConnections() {
-            const sqlDbConnection = await window.electron.sqlDbConnection();
+            const dbConnection = await window.electron.dbConnection();
             const isOnline = await window.electron.isOnline();
             if (isOnline) this.itemVisibility(this.connectionOnline)
-            if (sqlDbConnection) this.itemVisibility(this.connectionSql)
+            if (dbConnection) this.itemVisibility(this.connectionDb)
         }
     }
 

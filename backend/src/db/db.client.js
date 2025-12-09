@@ -11,13 +11,13 @@ const defineSavedFile = require("./models/savedFile.model");
 require('dotenv').config();
 
 class DatabaseClient {
-    constructor() {
+    constructor(config) {
         this.sequelize = new Sequelize(
-            process.env.DB_NAME,
-            process.env.DB_USER,
-            process.env.DB_PASSWORD,
+            config.DB_NAME,
+            config.DB_USER,
+            config.DB_PASSWORD,
             {
-                host: process.env.DB_HOST,
+                host: config,
                 dialect: 'postgres',
                 logging: false,
             },

@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld("electron", {
     light: () => ipcRenderer.invoke('mode:light'),
     initial: () => ipcRenderer.invoke('mode:initial'),
     isOnline: () => ipcRenderer.invoke('connected'),
-    sqlDbConnection: () => ipcRenderer.invoke('sqlDb:connection'),
+    dbConnection: () => ipcRenderer.invoke('db:connection'),
 });
 
 

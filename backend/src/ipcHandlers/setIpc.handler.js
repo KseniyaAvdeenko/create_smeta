@@ -4,6 +4,7 @@ const isOnline = require("@esm2cjs/is-online").default;
 const path = require("path");
 const process = require("node:process");
 const {app} = require('electron')
+const DbHandler = require('../ipcHandlers/db.handler');
 
 require('dotenv').config(
     {
@@ -24,8 +25,8 @@ function setIpcHandlers() {
     //appSizes
     ipcMain.handle('screen', async (_) => await screen.getPrimaryDisplay().workAreaSize);
 
-    //db handlers Postgres
-    //ipcMain.handle('sqlDb:connection', async (_) => await dbHandlers.getConnectionToSqlDB());
+    // db handlers Postgres
+    ipcMain.handle('db:connection', async (_) => await new DbHandler().getDbConnection());
 }
 
 module.exports = setIpcHandlers;
