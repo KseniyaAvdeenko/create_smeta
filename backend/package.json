@@ -38,6 +38,7 @@
     "dotenv": "^16.4.7",
     "electron-devtools-installer": "^4.0.0",
     "electron-squirrel-startup": "^1.0.1",
+    "firebase": "^12.6.0",
     "google-auth-library": "^9.15.1",
     "google-spreadsheet": "^4.1.4",
     "googleapis": "^144.0.0",

@@ -1,6 +1,6 @@
-const { postgresConfig } = require('../config/db.config');
+const postgresConfig = require('../config/db.config');
 const DatabaseClient = require('../db/sql/db.client');
-const { createRepositories } = require('../repositories');
+const { createRepositories } = require('../repositories/sql/index');
 
 class DbHandler {
   constructor() {
