@@ -12,7 +12,7 @@ require('electron-reload')(path.join(__dirname, '../'), {
 
 
 app.whenReady().then(() => {
-    createWindow();
+    createWindow().catch(e => e);
     setIpcHandlers();
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();    

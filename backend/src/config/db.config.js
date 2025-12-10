@@ -1,3 +1,4 @@
+require('dotenv').config();
 const postgresConfig = {
     DB_NAME: process.env.DB_NAME,
     DB_USER: process.env.DB_USER,

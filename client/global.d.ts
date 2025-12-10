@@ -4,3 +4,5 @@ declare module "*.module.sass";
 declare module "*.svg";
 declare module "*.png";
 declare module "*.ttf";
+declare module "*.ts";
+declare module "*.tsx";

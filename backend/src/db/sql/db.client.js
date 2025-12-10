@@ -12,16 +12,17 @@ require('dotenv').config();
 
 class DatabaseClient {
     constructor(config) {
-        this.sequelize = new Sequelize(
-            config.DB_NAME,
-            config.DB_USER,
-            config.DB_PASSWORD,
-            {
-                host: config,
-                dialect: 'postgres',
-                logging: false,
-            },
-        );
+        this.sequelize = new Sequelize(`postgres://${config.DB_USER}:${config.DB_PASSWORD}@${config.DB_HOST}:5432/${config.DB_NAME}`)
+        // this.sequelize = new Sequelize(
+        //     config.DB_NAME,
+        //     config.DB_USER,
+        //     config.DB_PASSWORD,
+        //     {
+        //         host: config.DB_HOST,
+        //         dialect: 'postgres',
+        //         logging: false,
+        //     },
+        // );
 
         this.models = this.initModels(this.sequelize);
     }
@@ -96,11 +97,11 @@ class DatabaseClient {
     async connect() {
         try {
             await this.sequelize.authenticate();
-            console.log('Connection has been established successfully.');
+            //console.log('Connection has been established successfully.');
             await this.sequelize.sync({alter: true});
             return true;
         } catch (error) {
-            console.error('Unable to connect to the database:', error);
+            //console.error('Unable to connect to the database:', error);
             return false;
         }
     }

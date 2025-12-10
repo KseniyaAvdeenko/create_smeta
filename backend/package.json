@@ -9,7 +9,8 @@
     "package": "electron-forge package NODE_ENV=prod",
     "make": "electron-forge make NODE_ENV=prod",
     "publish": "electron-forge publish",
-    "move-build": "node src/moveBuild.js"
+    "move-build": "node src/moveBuild.js",
+    "dev": "node src/dev/index.js"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.1",
