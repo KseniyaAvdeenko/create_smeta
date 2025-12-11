@@ -1,3 +1,4 @@
+require('dotenv').config();
 module.exports = {
     type: process.env.GOOGLE_TYPE,
     project_id: process.env.GOOGLE_PROJECT_ID,

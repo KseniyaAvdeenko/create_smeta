@@ -21,6 +21,30 @@ class DbHandler {
   }
 
   /**
+   * Инициализация структуры Firestore (создание документов с пустыми массивами)
+   */
+  async _initializeFirestoreStructure() {
+    const structure = [
+      { collection: 'SmetaWorks', doc: 'Works' },
+      { collection: 'SmetaWorks', doc: 'WorkCategories' },
+      { collection: 'SmetaWorks', doc: 'Measurements' },
+      { collection: 'SmetaOrders', doc: 'Orders' },
+      { collection: 'SmetaOrders', doc: 'OrderWorks' },
+      { collection: 'SmetaOrders', doc: 'OrderFiles' },
+    ];
+
+    for (const { collection, doc } of structure) {
+      const docRef = firebaseDb.collection(collection).doc(doc);
+      const snapshot = await docRef.get();
+      
+      if (!snapshot.exists) {
+        await docRef.set({ data: [] });
+        console.log(`Document created: ${collection}/${doc}`);
+      }
+    }
+  }
+
+  /**
    * Унифицированный метод "проверки подключения".
    * - для SQL реально коннектится к Postgres
    * - для Firebase просто возвращает true (или можно добавить тестовый запрос при необходимости)
@@ -30,13 +54,12 @@ class DbHandler {
 
     if (this.mode === 'firebase') {
       try {
-        const collections = ['SmetaWorks', 'SmetaOrders'];
-        for (const collName of collections) {
-          const snapshot = await firebaseDb.collection(collName).get();
-          console.log(`${collName}: ${snapshot.size} документов`);
-        }
+        // Создаем структуру коллекций, если их нет
+        await this._initializeFirestoreStructure();
+        console.log('Firebase подключен и инициализирован');
       } catch (error) {
-        console.log('Firebase подключен, но коллекции недоступны:', error.message);
+        console.log('Firebase подключен, но коллекции недоступны:', error);
+        console.log('Error details:', error.code, error.details);
       }
       return true;
     }
