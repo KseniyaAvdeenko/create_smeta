@@ -6,7 +6,7 @@ const { db } = require('../../db/firebase/firebase.client');
 /**
  * smetaOrders / orders
  * data: [ { id, name, client, date, ... } ]
- *
+ * item: {id: int, name: str, client: str, date: str}
  * Для удобства здесь же есть метод получения заказа с работами и файлами.
  */
 class FirebaseOrderRepository extends FirebaseArrayDocRepository {

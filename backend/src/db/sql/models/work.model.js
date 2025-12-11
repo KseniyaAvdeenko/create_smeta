@@ -14,7 +14,7 @@ function defineWork(sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      categoryName: {
+      category: {
         type: DataTypes.STRING,
         allowNull: false,
         field: 'category',

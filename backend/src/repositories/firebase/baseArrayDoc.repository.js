@@ -1,10 +1,6 @@
 const { collection, doc, getDoc, setDoc } = require('firebase/firestore');
 
-/**
- * Базовый репозиторий для документов вида:
- * { data: [ {...}, {...} ] }
- * в коллекции Firestore.
- */
+
 class FirebaseArrayDocRepository {
   /**
    * @param {import('firebase/firestore').Firestore} db

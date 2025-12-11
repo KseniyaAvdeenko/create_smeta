@@ -25,7 +25,7 @@ function setIpcHandlers() {
     //appSizes
     ipcMain.handle('screen', async (_) => await screen.getPrimaryDisplay().workAreaSize);
 
-    // db handlers Postgres
+    // db handlers Postgres or firebase
     ipcMain.handle('db:connection', async (_) => await new DbHandler().getDbConnection());
 }
 
