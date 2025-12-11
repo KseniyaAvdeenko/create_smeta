@@ -2,7 +2,7 @@ const {BrowserWindow, Menu, screen} = require("electron");
 const path = require('node:path');
 const isOnline = require("@esm2cjs/is-online").default;
 const installExtension = require('electron-devtools-installer');
-const dbHandler = require('./db.handler');
+const DbHandler = require('./db.handler');
 
 async function createMainWindow() {
     const primaryDisplay = screen.getPrimaryDisplay()
@@ -72,9 +72,11 @@ async function createMainWindow() {
         mainWindow.show();
       };
    
-      //const connected = await dbHandler.getDbConnection();
-
-      await isOnline() ?setTimeout(openMainWindow, 5000)  :setTimeout(openMainWindow, 3000)
+      const dbConnection = await new DbHandler().getDbConnection();
+      
+      await isOnline() && dbConnection
+       ?setTimeout(openMainWindow, 5000) 
+        :setTimeout(openMainWindow, 3000)
      
     // installExtension.default(installExtension.REDUX_DEVTOOLS)
     //     .then((name) => console.log(`Added Extension: ${name}`))

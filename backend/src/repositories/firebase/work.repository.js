@@ -12,7 +12,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
  */
 class FirebaseWorkRepository extends FirebaseArrayDocRepository {
   constructor(db) {
-    super(db, 'smetaWorks', 'works', 'id');
+    super(db, 'SmetaWorks', 'Works', 'id');
   }
 
   async findByCategory(categoryName) {

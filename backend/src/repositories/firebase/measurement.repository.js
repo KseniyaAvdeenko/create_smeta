@@ -7,7 +7,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
  */
 class FirebaseMeasurementRepository extends FirebaseArrayDocRepository {
   constructor(db) {
-    super(db, 'smetaWorks', 'measurements', 'id');
+    super(db, 'SmetaWorks', 'Measurements', 'id');
   }
 }
 

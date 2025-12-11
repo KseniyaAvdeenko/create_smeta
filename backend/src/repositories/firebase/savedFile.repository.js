@@ -8,7 +8,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
 class FirebaseSavedFileRepository extends FirebaseArrayDocRepository {
   constructor(db) {
     // Документ "orderFiles" в коллекции smetaOrders
-    super(db, 'smetaOrders', 'orderFiles', 'id');
+    super(db, 'SmetaOrders', 'OrderFiles', 'id');
   }
 
   async getByOrderId(orderId) {

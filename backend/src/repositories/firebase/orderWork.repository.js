@@ -7,7 +7,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
  */
 class FirebaseOrderWorkRepository extends FirebaseArrayDocRepository {
   constructor(db) {
-    super(db, 'smetaOrders', 'orderWorks', 'id');
+    super(db, 'SmetaOrders', 'OrderWorks', 'id');
   }
 
   async getByOrderId(orderId) {

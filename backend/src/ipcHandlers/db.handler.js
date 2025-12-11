@@ -3,12 +3,11 @@ const SqlDatabaseClient = require('../db/sql/db.client');
 const { createRepositories: createSqlRepositories } = require('../repositories/sql');
 const { createFirebaseRepositories } = require('../repositories/firebase');
 const { db: firebaseDb } = require('../db/firebase/firebase.client');
-const { collection, getDocs } = require('firebase/firestore');
 require('dotenv').config();
 
 class DbHandler {
   constructor() {
-    this.mode = process.env.DB_MODE; // 'sql' | 'firebase'
+    this.mode = (process.env.DB_MODE || 'sql').toLowerCase(); // 'sql' | 'firebase'
 
     if (this.mode === 'sql') {
       this.dbClient = new SqlDatabaseClient(postgresConfig);
@@ -27,13 +26,18 @@ class DbHandler {
    * - для Firebase просто возвращает true (или можно добавить тестовый запрос при необходимости)
    */
   getDbConnection = async () => {
-    if (this.mode === 'sql') {
-      return this.dbClient.connect();
-    }
+    if (this.mode === 'sql') return this.dbClient.connect();
 
     if (this.mode === 'firebase') {
-      const worksSnapshot = await getDocs(collection(firebaseDb, 'smetaWorks'));
-      console.log(`Firebase подключен. Найдено документов в smetaWorks: ${worksSnapshot.size}`);
+      try {
+        const collections = ['SmetaWorks', 'SmetaOrders'];
+        for (const collName of collections) {
+          const snapshot = await firebaseDb.collection(collName).get();
+          console.log(`${collName}: ${snapshot.size} документов`);
+        }
+      } catch (error) {
+        console.log('Firebase подключен, но коллекции недоступны:', error.message);
+      }
       return true;
     }
   };

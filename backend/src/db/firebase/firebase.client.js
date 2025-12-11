@@ -1,12 +1,11 @@
-const { initializeApp } = require('firebase/app');
-const { getFirestore } = require('firebase/firestore');
-const firebaseConfig = require('../../config/firebase.config');
+const admin = require('firebase-admin');
+const googleConfigs = require('../../config/google.config')
 
+if (!admin.apps.length) admin.initializeApp({credential: admin.credential.cert(googleConfigs)});
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = admin.firestore();
 
 module.exports = {
-  app,
+  admin,
   db,
 };

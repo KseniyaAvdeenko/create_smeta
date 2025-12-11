@@ -11,7 +11,7 @@ const { db } = require('../../db/firebase/firebase.client');
  */
 class FirebaseOrderRepository extends FirebaseArrayDocRepository {
   constructor(firestoreDb = db) {
-    super(firestoreDb, 'smetaOrders', 'orders', 'id');
+    super(firestoreDb, 'SmetaOrders', 'Orders', 'id');
     this.orderWorkRepo = new FirebaseOrderWorkRepository(firestoreDb);
     this.savedFileRepo = new FirebaseSavedFileRepository(firestoreDb);
   }

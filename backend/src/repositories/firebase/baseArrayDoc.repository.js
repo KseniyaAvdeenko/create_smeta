@@ -1,9 +1,6 @@
-const { collection, doc, getDoc, setDoc } = require('firebase/firestore');
-
-
 class FirebaseArrayDocRepository {
   /**
-   * @param {import('firebase/firestore').Firestore} db
+   * @param {import('firebase-admin').firestore.Firestore} db
    * @param {string} collectionName
    * @param {string} docId
    * @param {string} idField - поле, используемое как идентификатор элемента (по умолчанию "id")
@@ -16,18 +13,18 @@ class FirebaseArrayDocRepository {
   }
 
   _docRef() {
-    return doc(collection(this.db, this.collectionName), this.docId);
+    return this.db.collection(this.collectionName).doc(this.docId);
   }
 
   async _loadArray() {
-    const snap = await getDoc(this._docRef());
-    if (!snap.exists()) return [];
+    const snap = await this._docRef().get();
+    if (!snap.exists) return [];
     const data = snap.data();
     return Array.isArray(data.data) ? data.data : [];
   }
 
   async _saveArray(items) {
-    await setDoc(this._docRef(), { data: items });
+    await this._docRef().set({ data: items });
   }
 
   async getAll() {
