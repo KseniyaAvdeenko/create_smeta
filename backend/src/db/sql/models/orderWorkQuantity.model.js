@@ -1,40 +1,38 @@
 const {DataTypes} = require('sequelize');
 
-function defineOrderWork(sequelize) {
-    const OrderWork = sequelize.define(
-        'OrderWork',
+function defineOrderWorkQuantity(sequelize) {
+    const OrderWorkQuantity = sequelize.define(
+        'OrderWorkQuantity',
         {
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
                 primaryKey: true,
             },
-            workId: {
+            orderWorkId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                field: 'work_id',
+                field: 'orderWorkId',
             },
-            orderId: {
-                type: DataTypes.INTEGER,
+            measurement: {
+                type: DataTypes.STRING,
                 allowNull: false,
-                field: 'order_id',
             },
-            total: {
+            quantity: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                field: 'total',
-                default: 0
+                field: 'quantity',
             },
         },
         {
-            tableName: 'order_works',
+            tableName: 'order_work_quantity',
             timestamps: false,
         },
     );
 
-    return OrderWork;
+    return OrderWorkQuantity;
 }
 
-module.exports = defineOrderWork;
+module.exports = defineOrderWorkQuantity;
 
 

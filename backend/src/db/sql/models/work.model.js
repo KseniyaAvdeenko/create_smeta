@@ -19,15 +19,6 @@ function defineWork(sequelize) {
         allowNull: false,
         field: 'category',
       },
-      measurementId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'measurement_id',
-      },
-      cost: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
     },
     {
       tableName: 'work',

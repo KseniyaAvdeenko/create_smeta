@@ -2,7 +2,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
 
 /**
  * smetaWorks / measurements
- * data: [ { id, ... } ]
+ * data: [ item ]
  *item: {id: string}
  */
 class FirebaseMeasurementRepository extends FirebaseArrayDocRepository {

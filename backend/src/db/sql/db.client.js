@@ -1,12 +1,12 @@
 const {Sequelize} = require('sequelize');
-const process = require('node:process');
-
 const defineWorkCategory = require("./models/workCategory.model");
 const defineMeasurement = require("./models/measurement.model");
 const defineWork = require("./models/work.model");
 const defineOrder = require("./models/order.model");
 const defineOrderWork = require("./models/orderWork.model");
 const defineSavedFile = require("./models/savedFile.model");
+const defineWorkMeasurements = require("./models/workMeasurements.model");
+const defineOrderWorkQuantity = require("./models/orderWorkQuantity.model");
 
 require('dotenv').config();
 
@@ -23,7 +23,9 @@ class DatabaseClient {
         const Order = defineOrder(sequelize);
         const OrderWork = defineOrderWork(sequelize);
         const SavedFile = defineSavedFile(sequelize);
-
+        const WorkMeasurements = defineWorkMeasurements(sequelize);
+        const OrderWorkQuantity = defineOrderWorkQuantity(sequelize)
+        //workCats -> work
         Work.belongsTo(WorkCategory, {
             foreignKey: 'categoryName',
             targetKey: 'name',
@@ -34,18 +36,19 @@ class DatabaseClient {
             sourceKey: 'name',
             as: 'works',
         });
+        // work -> work measurement
 
-        Work.belongsTo(Measurement, {
-            foreignKey: 'measurementId',
-            targetKey: 'id',
-            as: 'measurement',
-        });
-        Measurement.hasMany(Work, {
+        WorkMeasurements.belongsTo(Work, {
             foreignKey: 'measurementId',
             sourceKey: 'id',
-            as: 'works',
+            as: 'work',
         });
-
+        Work.hasMany(WorkMeasurements, {
+            foreignKey: 'measurementId',
+            targetKey: 'id',
+            as: 'measurements',
+        });
+        //work -> orderWork
         OrderWork.belongsTo(Work, {
             foreignKey: 'workId',
             as: 'work',
@@ -54,7 +57,7 @@ class DatabaseClient {
             foreignKey: 'workId',
             as: 'orderWorks',
         });
-
+        //Order -> OrderWorks
         OrderWork.belongsTo(Order, {
             foreignKey: 'orderId',
             as: 'order',
@@ -63,7 +66,7 @@ class DatabaseClient {
             foreignKey: 'orderId',
             as: 'orderWorks',
         });
-
+        //Order -> SavedFiles
         SavedFile.belongsTo(Order, {
             foreignKey: 'orderId',
             as: 'order',
@@ -72,7 +75,15 @@ class DatabaseClient {
             foreignKey: 'orderId',
             as: 'savedFiles',
         });
-
+        //OrderWork -> OrderWorkQuantity
+         OrderWorkQuantity.belongsTo(OrderWork, {
+            foreignKey: 'orderWorkId',
+            as: 'orderWork',
+        });
+        OrderWork.hasMany(OrderWorkQuantity, {
+            foreignKey: 'orderWorkId',
+            as: 'orderWorkQuantities',
+        });
         return {
             WorkCategory,
             Measurement,
@@ -80,6 +91,7 @@ class DatabaseClient {
             Order,
             OrderWork,
             SavedFile,
+            WorkMeasurements
         };
     }
 
