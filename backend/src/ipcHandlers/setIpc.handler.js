@@ -26,6 +26,7 @@ function setIpcHandlers() {
     ipcMain.handle('screen', async (_) => await screen.getPrimaryDisplay().workAreaSize);
 
     // db handlers Postgres or firebase
+
     ipcMain.handle('db:connection', async (_) => await new DbHandler().getDbConnection());
     //Measurements
     ipcMain.handle('measurements:getAll', async (_) => await new DbHandler().measurementRepository.getAll());
@@ -36,7 +37,7 @@ function setIpcHandlers() {
 
     //Orders
     ipcMain.handle('orders:getAll', async (_) => await new DbHandler().orderRepository.getAll());
-    ipcMain.handle('orders:getById', async (_, id) => await new DbHandler().orderRepository.getById(id));
+    ipcMain.handle('orders:getByIdWithDetails', async (_, id) => await new DbHandler().orderRepository.getOrderWithDetails(id));
     ipcMain.handle('orders:create', async (_, orderData) => await new DbHandler().orderRepository.create(orderData));
     ipcMain.handle('orders:update', async (_, id, updateData) => await new DbHandler().orderRepository.update(id, updateData));
     ipcMain.handle('orders:delete', async (_, id) => await new DbHandler().orderRepository.delete(id));
@@ -57,6 +58,7 @@ function setIpcHandlers() {
     //Works
     ipcMain.handle('works:getAll', async () => await new DbHandler(_).measurementRepository.getAll());
     ipcMain.handle('works:getById', async (_, id) => await  new DbHandler().workRepository.getById(id));
+    ipcMain.handle('works:getByCategory', async (_, category) => await  new DbHandler().workRepository.findByCategory(category));
     ipcMain.handle('works:create', async (_, workData) => await  new DbHandler().workRepository.create(workData));
     ipcMain.handle('works:update', async (_, id, updateData) => await  new DbHandler().workRepository.update(id, updateData));
     ipcMain.handle('works:delete', async (_, id) => await  new DbHandler().workRepository.delete(id));

@@ -4,6 +4,11 @@ export type ElectronApi = {
     light: () => Promise<void>;
     initial: () => Promise<boolean>;
     isOnline: () => Promise<boolean>;
+    getAllMeasurements: () => Promise<any>
+    getByIdMeasurement: (id: string) => Promise<any>
+    createMeasurement: (data: any) => Promise<any>
+    updateMeasurements: (id: string) => Promise<any>
+    deleteMeasurements: (id: string) => Promise<any>
 };
 
 declare global {

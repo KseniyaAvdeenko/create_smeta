@@ -1,0 +1,128 @@
+$bgDark: #0F1C2E
+$bgLight: #ffffff
+$primary: #1F3A5F
+$accent: #3D5A80
+$textLight: #ffffff
+$textDark: #0F1C2E
+
+@mixin boxShadowDouble($value1, $value2)
+  -webkit-box-shadow: $value1, $value2
+  box-shadow: $value1, $value2
+
+@mixin boxShadowMultiple($value1, $value2, $value3,$value4, $value5)
+  -webkit-box-shadow: $value1, $value2, $value3, $value4, $value5
+  box-shadow: $value1, $value2, $value3, $value4, $value5
+
+@mixin boxShadow($value)
+  -webkit-box-shadow: $value
+  box-shadow: $value
+
+@mixin blur($value)
+  -webkit-backdrop-filter: blur($value)
+  backdrop-filter: blur($value)
+
+@mixin transition($prop)
+  -webkit-transition: $prop .5s ease
+  -o-transition: $prop .5s ease
+  transition: $prop .5s ease
+
+@mixin transform($func)
+  -webkit-transform: $func
+  -ms-transform: $func
+  transform: $func
+
+@mixin flex-dir($dir)
+  @if $dir == row
+    -webkit-box-orient: horizontal
+  @if $dir == column
+    -webkit-box-orient: vertical
+  -webkit-box-direction: normal
+  -ms-flex-direction: $dir
+  flex-direction: $dir
+
+@mixin flex-jc($value)
+  @if $value ==space-between
+    -webkit-box-pack: justify
+    -ms-flex-pack: justify
+  @else if $value == space-around
+    -ms-flex-pack: distribute
+  @else
+    -webkit-box-pack: $value
+    -ms-flex-pack: $value
+  justify-content: $value
+
+@mixin flex-ai($value)
+  -webkit-box-align: $value
+  -ms-flex-align: $value
+  align-items: $value
+
+@mixin flex($direction, $jc, $ai)
+  @extend .d-flex
+  @include flex-dir($direction)
+  @include flex-ai($ai)
+  @include flex-jc($jc)
+
+
+
+.grid
+  display: -ms-grid
+  display: grid
+
+.posRelative
+  position: relative
+
+.d-flex
+  display: -webkit-box
+  display: -ms-flexbox
+  display: flex
+
+.pointer
+    cursor: pointer
+
+.commonButton
+  padding: 1.5rem 2.5rem
+  width: fit-content
+  border-radius: .8rem
+  border: none
+  outline: none
+  font-size: 1.8rem
+  font-weight: 600
+  @include transition(all)
+  @extend .pointer
+
+
+//.accentButton
+//  @extend .commonButton
+//  background-color: $primary
+//  color: $text
+//  //@include boxShadowMultiple($shadow3)
+//  border: 1px solid rgba(30,167,253,0.4)
+//  background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 40%)
+//
+//.inputContainerCommon
+//  width: 100%
+//  margin-bottom: 2rem
+//  @include flex(column, center, start)
+//
+//  & > label
+//    margin-bottom: 1rem
+//    font-size: 1.8rem
+//
+//  & > input
+//    width: 100%
+//    padding: 1rem
+//    border-radius: 1rem
+//    border: none
+//    outline: none
+//    //color: $bg100
+//    @include transition(all)
+//
+//    &:focus
+//      border: none
+//      outline: none
+
+
+@media (prefers-color-scheme: light)
+
+
+@media (prefers-color-scheme: dark)

@@ -1,0 +1,20 @@
+@use '../../assets/styles/common' as *
+
+.header
+  @include flex(row, end, center)
+  padding: .7rem 2rem
+  gap: 3rem
+  border-bottom: .1rem solid $accent
+
+
+@media (prefers-color-scheme: light)
+    .header
+      color: $textDark
+      background: $bgLight
+
+
+
+@media (prefers-color-scheme: dark)
+    .header
+      background: $bgDark
+      color: $bgLight

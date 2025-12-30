@@ -7,7 +7,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
  * name: str,
  * category: str,
  * isDefault: boolean
- * measurements: [{measurement:string, cost: float}],
+ * workMeasurements: [{measurement:string, cost: float}],
  * }
  */
 class FirebaseWorkRepository extends FirebaseArrayDocRepository {
