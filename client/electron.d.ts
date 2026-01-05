@@ -1,3 +1,5 @@
+import {IMeasurement} from "./src/interface/ISmetaWorks";
+
 export type ElectronApi = {
     screen: () => Promise<{ width: number, height: number }>
     dark: () => Promise<void>;
@@ -5,10 +7,9 @@ export type ElectronApi = {
     initial: () => Promise<boolean>;
     isOnline: () => Promise<boolean>;
     getAllMeasurements: () => Promise<any>
-    getByIdMeasurement: (id: string) => Promise<any>
-    createMeasurement: (data: any) => Promise<any>
-    updateMeasurements: (id: string) => Promise<any>
-    deleteMeasurements: (id: string) => Promise<any>
+    getByIdMeasurement: (id: string) => Promise<IMeasurement|null>
+    createMeasurement: (data: IMeasurement) => Promise<IMeasurement|null>
+    deleteMeasurement: (id: string) => Promise<boolean>
 };
 
 declare global {

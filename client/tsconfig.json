@@ -18,5 +18,7 @@
     "types": ["vite/client"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "global.d.ts", "electron.d.ts"]
+  "exclude": ["node_modules", "global.d.ts",
+    "electron.d.ts"
+  ]
 }

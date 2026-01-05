@@ -6,10 +6,10 @@ export interface INTFInitial {
 }
 
 export interface IMeasurementInitial{
-    measurements: IMeasurement[]|null
+    measurements: IMeasurement[]|null;
+    measurement: IMeasurement|null;
     isLoading: boolean;
     isCreating: boolean;
-    isUpdating: boolean;
     isDeleting: boolean;
 }
 
