@@ -8,3 +8,4 @@ node_modules
 db.drawio.png
 /backend/smeta-service-account.json
 /backend/smetageneration-firebase-adminsdk-fbsvc-4d7b9323c7.json
+/backend/smeta-firebase.json
