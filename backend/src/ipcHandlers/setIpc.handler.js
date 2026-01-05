@@ -32,8 +32,14 @@ function setIpcHandlers() {
     ipcMain.handle('measurements:getAll', async (_) => await new DbHandler().measurementRepository.getAll());
     ipcMain.handle('measurements:getById', async (_, id) => await new DbHandler().measurementRepository.getById(id));
     ipcMain.handle('measurements:create', async (_, measurementData) => await new DbHandler().measurementRepository.create(measurementData));
-    ipcMain.handle('measurements:update', async (_, id, updateData) => await new DbHandler().measurementRepository.update(id, updateData));
     ipcMain.handle('measurements:delete', async (_, id) => await new DbHandler().measurementRepository.delete(id));
+
+    //WorkCategory
+    ipcMain.handle('workCategory:getAll', async (_) => await new DbHandler().workCategoryRepository.getAll());
+    ipcMain.handle('workCategory:getById', async (_, id) => await  new DbHandler().workCategoryRepository.getById(id));
+    ipcMain.handle('workCategory:create', async (_, workCategoryData) => await  new DbHandler().workCategoryRepository.create(workCategoryData));
+    ipcMain.handle('workCategory:update', async (_, id, updateData) => await  new DbHandler().workCategoryRepository.update(id, updateData));
+    ipcMain.handle('workCategory:delete', async (_, id) => await  new DbHandler().workCategoryRepository.delete(id));
 
     //Orders
     ipcMain.handle('orders:getAll', async (_) => await new DbHandler().orderRepository.getAll());
@@ -63,12 +69,6 @@ function setIpcHandlers() {
     ipcMain.handle('works:update', async (_, id, updateData) => await  new DbHandler().workRepository.update(id, updateData));
     ipcMain.handle('works:delete', async (_, id) => await  new DbHandler().workRepository.delete(id));
 
-    //WorkCategory
-    ipcMain.handle('workCategory:getAll', async (_) => await new DbHandler().workCategoryRepository.getAll());
-    ipcMain.handle('workCategory:getById', async (_, id) => await  new DbHandler().workCategoryRepository.getById(id));
-    ipcMain.handle('workCategory:create', async (_, workCategoryData) => await  new DbHandler().workCategoryRepository.create(workCategoryData));
-    ipcMain.handle('workCategory:update', async (_, id, updateData) => await  new DbHandler().workCategoryRepository.update(id, updateData));
-    ipcMain.handle('workCategory:delete', async (_, id) => await  new DbHandler().workCategoryRepository.delete(id));
 }
 
 module.exports = setIpcHandlers;

@@ -22,6 +22,7 @@ export interface IWorkInitial{
 }
 export interface IWorkCategoryInitial{
     workCategories: IWorkCategory[]|null;
+    workCategory: IWorkCategory|null;
     isLoading: boolean;
     isCreating: boolean;
     isUpdating: boolean;

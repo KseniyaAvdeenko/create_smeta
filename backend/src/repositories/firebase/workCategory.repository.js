@@ -7,8 +7,7 @@ const FirebaseArrayDocRepository = require('./baseArrayDoc.repository');
  */
 class FirebaseWorkCategoryRepository extends FirebaseArrayDocRepository {
   constructor(db) {
-    // В качестве идентификатора используем поле "name"
-    super(db, 'SmetaWorks', 'WorkCategories', 'name');
+    super(db, 'SmetaWorks', 'WorkCategories', 'id');
   }
 }
 

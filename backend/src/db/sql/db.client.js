@@ -27,26 +27,34 @@ class DatabaseClient {
         const OrderWorkQuantity = defineOrderWorkQuantity(sequelize)
         //workCats -> work
         Work.belongsTo(WorkCategory, {
-            foreignKey: 'categoryName',
+            foreignKey: 'categoryId',
             targetKey: 'name',
             as: 'category',
         });
         WorkCategory.hasMany(Work, {
-            foreignKey: 'categoryName',
+            foreignKey: 'categoryId',
             sourceKey: 'name',
             as: 'works',
         });
         // work -> work measurement
 
         WorkMeasurements.belongsTo(Work, {
-            foreignKey: 'measurementId',
-            sourceKey: 'id',
+            foreignKey: 'workId',
             as: 'work',
         });
         Work.hasMany(WorkMeasurements, {
-            foreignKey: 'measurementId',
-            targetKey: 'id',
+            foreignKey: 'workId',
             as: 'measurements',
+        });
+        // Measurement -> work measurement
+
+        WorkMeasurements.belongsTo(Measurement, {
+            foreignKey: 'measurementId',
+            as: 'work measurements',
+        });
+        Measurement.hasMany(WorkMeasurements, {
+            foreignKey: 'measurementId',
+            as: 'work measurements',
         });
         //work -> orderWork
         OrderWork.belongsTo(Work, {

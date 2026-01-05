@@ -11,8 +11,12 @@ contextBridge.exposeInMainWorld("electron", {
     getAllMeasurements: () => ipcRenderer.invoke('measurements:getAll'),
     getByIdMeasurement: (id) => ipcRenderer.invoke('measurements:getById', id),
     createMeasurement: (data) => ipcRenderer.invoke('measurements:create', data),
-    updateMeasurements: (id, data) => ipcRenderer.invoke('measurements:update', id, data),
-    deleteMeasurements: (id) => ipcRenderer.invoke('measurements:delete', id),
+    deleteMeasurement: (id) => ipcRenderer.invoke('measurements:delete', id),
+    getAllWorkCategories: () => ipcRenderer.invoke('workCategory:getAll'),
+    getByIdWorkCategories: (id) => ipcRenderer.invoke('workCategory:getById', id),
+    createWorkCategories: (data) => ipcRenderer.invoke('workCategory:create', data),
+    updateWorkCategories: (id, data) => ipcRenderer.invoke('workCategory:update',id, data),
+    deleteWorkCategories: (id) => ipcRenderer.invoke('workCategory:delete', id),
 });
 
 

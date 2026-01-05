@@ -1,22 +1,25 @@
-const { DataTypes } = require('sequelize');
+const {DataTypes} = require('sequelize');
 
 
 function defineMeasurement(sequelize) {
-  const Measurement = sequelize.define(
-    'Measurement',
-    {
-      id: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-      },
-    },
-    {
-      tableName: 'measurements',
-      timestamps: false,
-    },
-  );
+    const Measurement = sequelize.define(
+        'Measurement',
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+            },
+            name: {
+                type: DataTypes.STRING,
+            },
+        },
+        {
+            tableName: 'measurements',
+            timestamps: false,
+        },
+    );
 
-  return Measurement;
+    return Measurement;
 }
 
 module.exports = defineMeasurement;

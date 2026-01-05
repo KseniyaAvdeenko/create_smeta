@@ -1,37 +1,36 @@
-const { DataTypes } = require('sequelize');
+const {DataTypes} = require('sequelize');
 
 
 function defineWork(sequelize) {
-  const Work = sequelize.define(
-    'Work',
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      category: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        field: 'category',
-      },
-    },
-    {
-      tableName: 'work',
-      timestamps: false,
-      indexes: [
+    const Work = sequelize.define(
+        'Work',
         {
-          fields: ['name'],
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            categoryId: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+            },
         },
-      ],
-    },
-  );
+        {
+            tableName: 'work',
+            timestamps: false,
+            indexes: [
+                {
+                    fields: ['name'],
+                },
+            ],
+        },
+    );
 
-  return Work;
+    return Work;
 }
 
 module.exports = defineWork;

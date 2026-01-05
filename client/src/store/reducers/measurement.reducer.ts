@@ -35,21 +35,21 @@ export const measurementReducer = createSlice({
         startCreating(state) {
             state.isCreating = true;
         },
-        createMeasurementsSuccess(state, action: PayloadAction<IMeasurement>) {
+        createMeasurementSuccess(state, action: PayloadAction<IMeasurement>) {
             state.isCreating = false;
             state.measurements = [...state.measurements, action.payload];
         },
-        createMeasurementsFail(state) {
+        createMeasurementFail(state) {
             state.isCreating = false;
         },
         startDeleting(state) {
             state.isDeleting = true;
         },
-        deleteMeasurementsSuccess(state, action: PayloadAction<string>) {
+        deleteMeasurementSuccess(state, action: PayloadAction<string>) {
             state.isDeleting = false;
             state.measurements = state.measurements.filter(el => el.id !== action.payload);
         },
-        deleteMeasurementsFail(state) {
+        deleteMeasurementFail(state) {
             state.isDeleting = false;
         },
     }

@@ -1,5 +1,8 @@
-export interface IWorkCategory{
+export interface IWorkCategoryBase {
     name: string
+}
+export interface IWorkCategory extends IWorkCategoryBase{
+    id: number
 }
 
 export interface IMeasurement{
@@ -13,7 +16,7 @@ export interface IWorkMeasurement{
 
 export interface IWorkBase{
     name: string;
-    category: string;
+    categoryId: number;
     isDefault: boolean;
     workMeasurements: IWorkMeasurement[]
 }
