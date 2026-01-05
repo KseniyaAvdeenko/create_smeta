@@ -16,7 +16,7 @@ export const getMeasurements = () => async (dispatch: AppDispatch) => {
 
 export const getMeasurementById = (id: string) => async (dispatch: AppDispatch) =>{
     try{
-        const resp = await window.electron.getByIdMeasurement(id);
+        const resp = await window.electron.getMeasurementById(id);
         dispatch(measurementReducer.actions.loadMeasurementSuccess(resp));
     }catch (e) {
         new NtfAction(dispatch).addNotification({message: 'Ошибка загрузки единицы измерения: '+ e.message, type: 'error'});

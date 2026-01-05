@@ -9,14 +9,22 @@ contextBridge.exposeInMainWorld("electron", {
     isOnline: () => ipcRenderer.invoke('connected'),
     dbConnection: () => ipcRenderer.invoke('db:connection'),
     getAllMeasurements: () => ipcRenderer.invoke('measurements:getAll'),
-    getByIdMeasurement: (id) => ipcRenderer.invoke('measurements:getById', id),
+    getMeasurementById: (id) => ipcRenderer.invoke('measurements:getById', id),
     createMeasurement: (data) => ipcRenderer.invoke('measurements:create', data),
     deleteMeasurement: (id) => ipcRenderer.invoke('measurements:delete', id),
+
     getAllWorkCategories: () => ipcRenderer.invoke('workCategory:getAll'),
-    getByIdWorkCategories: (id) => ipcRenderer.invoke('workCategory:getById', id),
-    createWorkCategories: (data) => ipcRenderer.invoke('workCategory:create', data),
-    updateWorkCategories: (id, data) => ipcRenderer.invoke('workCategory:update',id, data),
-    deleteWorkCategories: (id) => ipcRenderer.invoke('workCategory:delete', id),
+    getWorkCategoryById: (id) => ipcRenderer.invoke('workCategory:getById', id),
+    createWorkCategory: (data) => ipcRenderer.invoke('workCategory:create', data),
+    updateWorkCategory: (id, data) => ipcRenderer.invoke('workCategory:update',id, data),
+    deleteWorkCategory: (id) => ipcRenderer.invoke('workCategory:delete', id),
+
+    getAllWorks: () => ipcRenderer.invoke('works:getAll'),
+    getWorkById: (id) => ipcRenderer.invoke('works:getById', id),
+    getWorksByCategoriesId: (id) => ipcRenderer.invoke('works:getByCategory', id),
+    createWork: (data) => ipcRenderer.invoke('works:create', data),
+    updateWork: (id, data) => ipcRenderer.invoke('works:update',id, data),
+    deleteWork: (id) => ipcRenderer.invoke('works:delete', id),
 });
 
 

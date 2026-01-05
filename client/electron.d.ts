@@ -1,4 +1,4 @@
-import {IMeasurement} from "./src/interface/ISmetaWorks";
+import {IMeasurement, IWorkCategory, IWorkBase, IWorkCategoryBase, IWork} from "./src/interface/ISmetaWorks";
 
 export type ElectronApi = {
     screen: () => Promise<{ width: number, height: number }>
@@ -6,15 +6,24 @@ export type ElectronApi = {
     light: () => Promise<void>;
     initial: () => Promise<boolean>;
     isOnline: () => Promise<boolean>;
-    getAllMeasurements: () => Promise<any>
-    getByIdMeasurement: (id: string) => Promise<IMeasurement | null>;
+    //Measurements
+    getAllMeasurements: () => Promise<IMeasurement[]>
+    getMeasurementById: (id: string) => Promise<IMeasurement | null>;
     createMeasurement: (data: IMeasurement) => Promise<IMeasurement | null>;
     deleteMeasurement: (id: string) => Promise<1 | 0>;
-    getAllWorkCategories: () => Promise<any>
-    getByIdWorkCategories: () => Promise<any>
-    createWorkCategories: () => Promise<any>
-    updateWorkCategories: () => Promise<any>
-    deleteWorkCategories: () => Promise<any>
+    //Work categories
+    getAllWorkCategories: () => Promise<IWorkCategory[]>
+    getWorkCategoryById: (id: number) => Promise<IWorkCategory>
+    createWorkCategory: (data: IWorkCategoryBase) => Promise<IWorkCategory>
+    updateWorkCategory: (id: number, data: IWorkCategoryBase) => Promise<IWorkCategory>
+    deleteWorkCategory: (id: number) => Promise<boolean>
+    //works
+    getAllWorks: () => Promise<IWork[]|null>
+    getWorkById: (id: number) => Promise<IWork>
+    getWorksByCategoriesId: (categoryId: number) => Promise<IWork[]>
+    createWork: (data: IWorkBase) => Promise<IWork>
+    updateWork: (id: number, data: IWorkBase) => Promise<IWork>
+    deleteWork: (id: number) => Promise<boolean>
 };
 
 declare global {

@@ -13,16 +13,17 @@ export interface IMeasurementInitial{
     isDeleting: boolean;
 }
 
-export interface IWorkInitial{
-    works: IWork[]|null;
+export interface IWorkCategoryInitial{
+    workCategories: IWorkCategory[]|null;
+    workCategory: IWorkCategory|null;
     isLoading: boolean;
     isCreating: boolean;
     isUpdating: boolean;
     isDeleting: boolean;
 }
-export interface IWorkCategoryInitial{
-    workCategories: IWorkCategory[]|null;
-    workCategory: IWorkCategory|null;
+export interface IWorkInitial{
+    works: IWork[]|null;
+    work: IWork|null;
     isLoading: boolean;
     isCreating: boolean;
     isUpdating: boolean;

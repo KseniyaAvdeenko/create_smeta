@@ -15,9 +15,9 @@ class FirebaseWorkRepository extends FirebaseArrayDocRepository {
     super(db, 'SmetaWorks', 'Works', 'id');
   }
 
-  async findByCategory(categoryName) {
+  async findByCategory(categoryId) {
     const all = await this.getAll();
-    return all.filter((w) => w.categoryName === categoryName);
+    return all.filter((w) => w.categoryId === categoryId);
   }
 }
 

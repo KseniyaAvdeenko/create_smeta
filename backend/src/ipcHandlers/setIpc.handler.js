@@ -41,6 +41,14 @@ function setIpcHandlers() {
     ipcMain.handle('workCategory:update', async (_, id, updateData) => await  new DbHandler().workCategoryRepository.update(id, updateData));
     ipcMain.handle('workCategory:delete', async (_, id) => await  new DbHandler().workCategoryRepository.delete(id));
 
+    //Works
+    ipcMain.handle('works:getAll', async () => await new DbHandler(_).measurementRepository.getAll());
+    ipcMain.handle('works:getById', async (_, id) => await  new DbHandler().workRepository.getById(id));
+    ipcMain.handle('works:getByCategory', async (_, category) => await  new DbHandler().workRepository.findByCategory(category));
+    ipcMain.handle('works:create', async (_, workData) => await  new DbHandler().workRepository.create(workData));
+    ipcMain.handle('works:update', async (_, id, updateData) => await  new DbHandler().workRepository.update(id, updateData));
+    ipcMain.handle('works:delete', async (_, id) => await  new DbHandler().workRepository.delete(id));
+
     //Orders
     ipcMain.handle('orders:getAll', async (_) => await new DbHandler().orderRepository.getAll());
     ipcMain.handle('orders:getByIdWithDetails', async (_, id) => await new DbHandler().orderRepository.getOrderWithDetails(id));
@@ -61,13 +69,7 @@ function setIpcHandlers() {
     //ipcMain.handle('savedFile:create', async (_, savedFile) => await new DbHandler().savedFileRepository.create(savedFile));
     //ipcMain.handle('savedFile:delete', async (_, id) => await  new DbHandler().savedFileRepository.delete(id));
 
-    //Works
-    ipcMain.handle('works:getAll', async () => await new DbHandler(_).measurementRepository.getAll());
-    ipcMain.handle('works:getById', async (_, id) => await  new DbHandler().workRepository.getById(id));
-    ipcMain.handle('works:getByCategory', async (_, category) => await  new DbHandler().workRepository.findByCategory(category));
-    ipcMain.handle('works:create', async (_, workData) => await  new DbHandler().workRepository.create(workData));
-    ipcMain.handle('works:update', async (_, id, updateData) => await  new DbHandler().workRepository.update(id, updateData));
-    ipcMain.handle('works:delete', async (_, id) => await  new DbHandler().workRepository.delete(id));
+
 
 }
 
