@@ -68,9 +68,6 @@ function setIpcHandlers() {
     ipcMain.handle('savedFile:getByOrderId', async (_, orderId) => await new DbHandler().savedFileRepository.getByOrderId(orderId));
     //ipcMain.handle('savedFile:create', async (_, savedFile) => await new DbHandler().savedFileRepository.create(savedFile));
     //ipcMain.handle('savedFile:delete', async (_, id) => await  new DbHandler().savedFileRepository.delete(id));
-
-
-
 }
 
 module.exports = setIpcHandlers;

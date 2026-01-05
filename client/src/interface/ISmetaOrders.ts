@@ -1,5 +1,4 @@
 export interface IOrderBase {
-    id: number;
     name: string;
     client: string;
     date: string;
