@@ -1,5 +1,5 @@
 import {IMeasurement, IWork, IWorkBase, IWorkCategory, IWorkCategoryBase} from "./src/interface/ISmetaWorks";
-import {IOrder, IOrderBase, IOrderWork, IOrderWorkBase} from "./src/interface/ISmetaOrders";
+import {IOrder, IOrderBase, IOrderWork, IOrderWorkBase, ISavedFile, ISavedFileBase} from "./src/interface/ISmetaOrders";
 
 export type ElectronApi = {
     screen: () => Promise<{ width: number, height: number }>
@@ -17,28 +17,33 @@ export type ElectronApi = {
     getWorkCategoryById: (id: number) => Promise<IWorkCategory>
     createWorkCategory: (data: IWorkCategoryBase) => Promise<IWorkCategory>
     updateWorkCategory: (id: number, data: IWorkCategoryBase) => Promise<IWorkCategory>
-    deleteWorkCategory: (id: number) => Promise<boolean>
+    deleteWorkCategory: (id: number) => Promise<1 | 0>;
     //works
     getAllWorks: () => Promise<IWork[] | null>
     getWorkById: (id: number) => Promise<IWork>
     getWorksByCategoriesId: (categoryId: number) => Promise<IWork[]>
     createWork: (data: IWorkBase) => Promise<IWork>
     updateWork: (id: number, data: IWorkBase) => Promise<IWork>
-    deleteWork: (id: number) => Promise<boolean>
+    deleteWork: (id: number) => Promise<1 | 0>;
     //orders
     getAllOrders: () => Promise<IOrder[] | null>
     getOrderById: (id: number) => Promise<IOrder | null>
     createOrder: (data: IOrderBase) => Promise<IOrder>
     updateOrder: (id: number, data: IOrderBase) => Promise<IOrder>
-    deleteOrder: (id: number) => Promise<boolean>
+    deleteOrder: (id: number) => Promise<1 | 0>;
     //order works
-    getAllOrderWorks: () => Promise<IOrderWork[]|null>
-    getAllOrderWorksByOrderId: (orderId: number) => Promise<IOrderWork[]|null>
-    getOrderWorkById: (id: number) => Promise<IOrderWork|null>
+    getAllOrderWorks: () => Promise<IOrderWork[] | null>
+    getAllOrderWorksByOrderId: (orderId: number) => Promise<IOrderWork[] | null>
+    getOrderWorkById: (id: number) => Promise<IOrderWork | null>
     createOrderWork: (data: IOrderWorkBase) => Promise<IOrderWork>
     updateOrderWork: (id: number, data: IOrderWorkBase) => Promise<IOrderWork>
-    deleteOrderWork: (id: number) => Promise<boolean>
-
+    deleteOrderWork: (id: number) => Promise<1 | 0>;
+    // order files
+    getAllOrderFiles: () => Promise<ISavedFile[]|null>
+    getAllOrderFilesByOrderId: (orderId: number) => Promise<ISavedFile[]|null>
+    getOrderFileById: (id: number) => Promise<ISavedFile|null>
+    createOrderFile: (data: ISavedFileBase) => Promise<ISavedFile|null>
+    deleteOrderFile: (id: number) => Promise<1 | 0>;
 };
 
 declare global {

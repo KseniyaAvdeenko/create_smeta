@@ -38,6 +38,12 @@ contextBridge.exposeInMainWorld("electron", {
     createOrderWork: (data) => ipcRenderer.invoke('orderWorks:create', data),
     updateOrderWork: (id, data) => ipcRenderer.invoke('orderWorks:update',id, data),
     deleteOrderWork: (id) => ipcRenderer.invoke('orderWorks:delete', id),
+
+    getAllOrderFiles: () => ipcRenderer.invoke('savedFile:getAll'),
+    getAllOrderFilesByOrderId: (orderId) => ipcRenderer.invoke('savedFile:getByOrderId', orderId),
+    getOrderFileById: (id) => ipcRenderer.invoke('savedFile:getById', id),
+    createOrderFile: (data) => ipcRenderer.invoke('savedFile:create', data),
+    deleteOrderFile: (id) => ipcRenderer.invoke('savedFile:delete', id),
 });
 
 

@@ -26,11 +26,11 @@ export interface IOrderWork extends IOrderBase {
 }
 
 export interface ISavedFileBase{
-    id: number
-}
-
-export interface ISavedFile extends ISavedFileBase{
     orderId: number;
     name: string;
     date: string;
+}
+
+export interface ISavedFile extends ISavedFileBase{
+     id: number
 }
