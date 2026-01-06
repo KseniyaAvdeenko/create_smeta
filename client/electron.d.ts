@@ -42,7 +42,7 @@ export type ElectronApi = {
     getAllOrderFiles: () => Promise<ISavedFile[]|null>
     getAllOrderFilesByOrderId: (orderId: number) => Promise<ISavedFile[]|null>
     getOrderFileById: (id: number) => Promise<ISavedFile|null>
-    createOrderFile: (data: ISavedFileBase) => Promise<ISavedFile|null>
+    generateOrderFile: (order: IOrder, orderWorks: IOrderWork[]) => Promise<ISavedFile|null>
     deleteOrderFile: (id: number) => Promise<1 | 0>;
 };
 

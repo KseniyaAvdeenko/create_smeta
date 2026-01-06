@@ -68,8 +68,8 @@ function setIpcHandlers() {
     ipcMain.handle('savedFile:getAll', async (_) => await new DbHandler().savedFileRepository.getAll());
     ipcMain.handle('savedFile:getByOrderId', async (_, orderId) => await new DbHandler().savedFileRepository.getByOrderId(orderId));
     ipcMain.handle('savedFile:getById', async (_, id) => await new DbHandler().savedFileRepository.getById(id));
-    ipcMain.handle('savedFile:create', async (_, savedFile) => await new DbHandler().savedFileRepository.create(savedFile));
-    ipcMain.handle('savedFile:delete', async (_, id) => await  new DbHandler().savedFileRepository.delete(id));
+    ipcMain.handle('savedFile:generate', async (_, order, orderWorks, folderId) => await new DbHandler().savedFileRepository.generate(order, orderWorks, folderId));
+    ipcMain.handle('savedFile:remove', async (_, id) => await new DbHandler().savedFileRepository.remove(id));
 }
 
 module.exports = setIpcHandlers;

@@ -1,7 +1,7 @@
 import {AppDispatch} from "../index";
 import NtfAction from "./ntf.action";
 import {orderFilesReducer} from "../reducers/orderFile.reducer";
-import {ISavedFileBase} from "../../interface/ISmetaOrders";
+import {IOrder, IOrderWork, ISavedFileBase} from "../../interface/ISmetaOrders";
 
 
 
@@ -37,10 +37,10 @@ export const getOrderFileById = (id: number) => async (dispatch: AppDispatch) =>
     }
 }
 
-export const createOrderFile = (data: ISavedFileBase) => async (dispatch: AppDispatch) =>{
+export const generateOrderFile = (order: IOrder, orderWorks: IOrderWork[]) => async (dispatch: AppDispatch) =>{
     try{
         dispatch(orderFilesReducer.actions.startCreating());
-        const resp = await window.electron.createOrderFile(data);
+        const resp = await window.electron.generateOrderFile(order, orderWorks);
         dispatch(orderFilesReducer.actions.createOrderFileSuccess(resp));
         new NtfAction(dispatch).addNotification({message: `Файл заказа (сметы) создан`, type: 'success'});
     }catch (e) {
