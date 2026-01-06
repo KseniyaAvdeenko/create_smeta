@@ -1,5 +1,5 @@
 import {IMeasurement, IWork, IWorkBase, IWorkCategory, IWorkCategoryBase} from "./src/interface/ISmetaWorks";
-import {IOrder, IOrderBase} from "./src/interface/ISmetaOrders";
+import {IOrder, IOrderBase, IOrderWork, IOrderWorkBase} from "./src/interface/ISmetaOrders";
 
 export type ElectronApi = {
     screen: () => Promise<{ width: number, height: number }>
@@ -26,11 +26,19 @@ export type ElectronApi = {
     updateWork: (id: number, data: IWorkBase) => Promise<IWork>
     deleteWork: (id: number) => Promise<boolean>
     //orders
-    getAllOrders: () => Promise<IOrder[]|null>
-    getOrderById: (id: number) => Promise<IOrder|null>
-    createOrder: (data:IOrderBase) => Promise<IOrder>
-    updateOrder: (id: number, data:IOrderBase) => Promise<IOrder>
+    getAllOrders: () => Promise<IOrder[] | null>
+    getOrderById: (id: number) => Promise<IOrder | null>
+    createOrder: (data: IOrderBase) => Promise<IOrder>
+    updateOrder: (id: number, data: IOrderBase) => Promise<IOrder>
     deleteOrder: (id: number) => Promise<boolean>
+    //order works
+    getAllOrderWorks: () => Promise<IOrderWork[]|null>
+    getAllOrderWorksByOrderId: (orderId: number) => Promise<IOrderWork[]|null>
+    getOrderWorkById: (id: number) => Promise<IOrderWork|null>
+    createOrderWork: (data: IOrderWorkBase) => Promise<IOrderWork>
+    updateOrderWork: (id: number, data: IOrderWorkBase) => Promise<IOrderWork>
+    deleteOrderWork: (id: number) => Promise<boolean>
+
 };
 
 declare global {

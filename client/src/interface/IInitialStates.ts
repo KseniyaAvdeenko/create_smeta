@@ -1,6 +1,6 @@
 import {INotification} from "./IApp";
 import {IMeasurement, IWork, IWorkCategory} from "./ISmetaWorks";
-import {IOrder} from "./ISmetaOrders";
+import {IOrder, IOrderWork} from "./ISmetaOrders";
 
 export interface INTFInitial {
     notifications: INotification[];
@@ -34,6 +34,15 @@ export interface IWorkInitial{
 export interface IOrderInitial{
     orders: IOrder[]|null;
     order: IOrder|null;
+    isLoading: boolean;
+    isCreating: boolean;
+    isUpdating: boolean;
+    isDeleting: boolean;
+}
+
+export interface IOrderWorksInitial{
+    orderWorks: IOrderWork[]|null;
+    orderWork: IOrderWork|null;
     isLoading: boolean;
     isCreating: boolean;
     isUpdating: boolean;

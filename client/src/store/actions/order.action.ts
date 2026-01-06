@@ -9,7 +9,7 @@ export const getOrders = () => async (dispatch: AppDispatch) => {
         const resp = await window.electron.getAllOrders();
         dispatch(orderReducer.actions.loadOrdersSuccess(resp));
     }catch (e) {
-        new NtfAction(dispatch).addNotification({message: 'Ошибка загрузки заказав (смет): '+ e.message, type: 'error'});
+        new NtfAction(dispatch).addNotification({message: 'Ошибка загрузки заказов (смет): '+ e.message, type: 'error'});
         dispatch(orderReducer.actions.loadOrdersFail());
     }
 }

@@ -58,6 +58,7 @@ function setIpcHandlers() {
 
     //OrderWorks
     ipcMain.handle('orderWorks:getAll', async (_) => await new DbHandler().orderWorkRepository.getAll());
+    ipcMain.handle('orderWorks:getAllByOrderId', async (_, orderId) => await new DbHandler().orderWorkRepository.getByOrderId(orderId));
     ipcMain.handle('orderWorks:getById', async (_, id) => await new DbHandler().orderWorkRepository.getById(id));
     ipcMain.handle('orderWorks:create', async (_, orderWorkData) => await new DbHandler().orderWorkRepository.create(orderWorkData));
     ipcMain.handle('orderWorks:update', async (_, id, updateData) => await new DbHandler().orderWorkRepository.update(id, updateData));
