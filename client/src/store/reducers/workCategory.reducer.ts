@@ -4,7 +4,6 @@ import {PayloadAction} from "@reduxjs/toolkit/dist";
 import {IWorkCategory} from "../../interface/ISmetaWorks";
 
 
-
 const initialState: IWorkCategoryInitial = {
     workCategories: null,
     workCategory: null,
@@ -40,7 +39,7 @@ export const workCategoryReducer = createSlice({
         },
         createWorkCategorySuccess(state, action: PayloadAction<IWorkCategory>) {
             state.isCreating = false;
-            state.workCategories = [...state.workCategories, action.payload];
+            state.workCategories = state.workCategories ? [...state.workCategories, action.payload] : [action.payload];
         },
         createWorkCategoryFail(state) {
             state.isCreating = false;
@@ -50,7 +49,9 @@ export const workCategoryReducer = createSlice({
         },
         updateWorkCategorySuccess(state, action: PayloadAction<IWorkCategory>) {
             state.isCreating = false;
-            state.workCategories = [...state.workCategories.filter(el => el.id !== action.payload.id), action.payload];
+            state.workCategories = state.workCategories
+                ? [...state.workCategories.filter(el => el.id !== action.payload.id), action.payload]
+                : [action.payload];
         },
         updateWorkCategoryFail(state) {
             state.isUpdating = false;
@@ -60,7 +61,7 @@ export const workCategoryReducer = createSlice({
         },
         deleteWorkCategorySuccess(state, action: PayloadAction<number>) {
             state.isDeleting = false;
-            state.workCategories = state.workCategories.filter(el => el.id !== action.payload);
+            state.workCategories = state.workCategories && state.workCategories.filter(el => el.id !== action.payload);
         },
         deleteWorkCategoryFail(state) {
             state.isDeleting = false;

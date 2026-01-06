@@ -36,14 +36,14 @@ export const orderFilesReducer = createSlice({
             state.orderFile = action.payload;
         },
         loadOrderFileFail(state) {
-            state.order = null;
+            state.orderFile = null;
         },
         startCreating(state) {
             state.isCreating = true;
         },
         createOrderFileSuccess(state, action: PayloadAction<ISavedFile>) {
             state.isCreating = false;
-            state.orderFiles = [...state.orderFiles, action.payload];
+            state.orderFiles = state.orderFiles ? [...state.orderFiles, action.payload] : [action.payload];
         },
         createOrderFileFail(state) {
             state.isCreating = false;
@@ -53,7 +53,7 @@ export const orderFilesReducer = createSlice({
         },
         deleteOrderFileSuccess(state, action: PayloadAction<number>) {
             state.isDeleting = false;
-            state.orderFiles = state.orderFiles.filter(el => el.id !== action.payload);
+            state.orderFiles = state.orderFiles && state.orderFiles.filter(el => el.id !== action.payload);
         },
         deleteOrderFileFail(state) {
             state.isDeleting = false;

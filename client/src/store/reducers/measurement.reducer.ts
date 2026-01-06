@@ -26,7 +26,7 @@ export const measurementReducer = createSlice({
         loadMeasurementsFail(state) {
             state.isLoading = false;
         },
-        loadMeasurementSuccess(state, action: PayloadAction<IMeasurement>) {
+        loadMeasurementSuccess(state, action: PayloadAction<IMeasurement|null>) {
             state.measurement = action.payload;
         },
         loadMeasurementFail(state) {
@@ -37,7 +37,7 @@ export const measurementReducer = createSlice({
         },
         createMeasurementSuccess(state, action: PayloadAction<IMeasurement>) {
             state.isCreating = false;
-            state.measurements = [...state.measurements, action.payload];
+            state.measurements = state.measurements ? [...state.measurements, action.payload]: [action.payload];
         },
         createMeasurementFail(state) {
             state.isCreating = false;
@@ -47,7 +47,7 @@ export const measurementReducer = createSlice({
         },
         deleteMeasurementSuccess(state, action: PayloadAction<string>) {
             state.isDeleting = false;
-            state.measurements = state.measurements.filter(el => el.id !== action.payload);
+            state.measurements =state.measurements && state.measurements.filter(el => el.id !== action.payload);
         },
         deleteMeasurementFail(state) {
             state.isDeleting = false;

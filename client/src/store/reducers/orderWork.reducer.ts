@@ -34,18 +34,18 @@ export const orderWorksReducer = createSlice({
         loadOrderWorksOrderIdFail(state) {
             state.isLoading = false;
         },
-        loadOrderWorkSuccess(state, action: PayloadAction<IOrderWork|null>) {
+        loadOrderWorkSuccess(state, action: PayloadAction<IOrderWork | null>) {
             state.orderWork = action.payload;
         },
         loadOrderWorkFail(state) {
-            state.order = null;
+            state.orderWork = null;
         },
         startCreating(state) {
             state.isCreating = true;
         },
         createOrderWorkSuccess(state, action: PayloadAction<IOrderWork>) {
             state.isCreating = false;
-            state.orderWorks = [...state.orderWorks, action.payload];
+            state.orderWorks = state.orderWorks ? [...state.orderWorks, action.payload] : [action.payload];
         },
         createOrderWorkFail(state) {
             state.isCreating = false;
@@ -55,7 +55,9 @@ export const orderWorksReducer = createSlice({
         },
         updateOrderWorkSuccess(state, action: PayloadAction<IOrderWork>) {
             state.isCreating = false;
-            state.orderWorks = [...state.orderWorks.filter(el => el.id !== action.payload.id), action.payload];
+            state.orderWorks = state.orderWorks
+                ? [...state.orderWorks.filter(el => el.id !== action.payload.id), action.payload]
+                : [action.payload];
         },
         updateOrderWorkFail(state) {
             state.isUpdating = false;
@@ -65,7 +67,7 @@ export const orderWorksReducer = createSlice({
         },
         deleteOrderWorkSuccess(state, action: PayloadAction<number>) {
             state.isDeleting = false;
-            state.orderWorks = state.orderWorks.filter(el => el.id !== action.payload);
+            state.orderWorks = state.orderWorks && state.orderWorks.filter(el => el.id !== action.payload);
         },
         deleteOrderWorkFail(state) {
             state.isDeleting = false;

@@ -38,7 +38,7 @@ export const orderReducer = createSlice({
         },
         createOrderSuccess(state, action: PayloadAction<IOrder>) {
             state.isCreating = false;
-            state.orders = [...state.orders, action.payload];
+            state.orders = state.orders ? [...state.orders, action.payload]: [action.payload];
         },
         createOrderFail(state) {
             state.isCreating = false;
@@ -48,7 +48,7 @@ export const orderReducer = createSlice({
         },
         updateOrderSuccess(state, action: PayloadAction<IOrder>) {
             state.isCreating = false;
-            state.orders = [...state.orders.filter(el => el.id !== action.payload.id), action.payload];
+            state.orders = state.orders ? [...state.orders.filter(el => el.id !== action.payload.id), action.payload] : [action.payload];
         },
         updateOrderFail(state) {
             state.isUpdating = false;
@@ -58,7 +58,7 @@ export const orderReducer = createSlice({
         },
         deleteOrderSuccess(state, action: PayloadAction<number>) {
             state.isDeleting = false;
-            state.orders = state.orders.filter(el => el.id !== action.payload);
+            state.orders = state.orders && state.orders.filter(el => el.id !== action.payload);
         },
         deleteOrderFail(state) {
             state.isDeleting = false;

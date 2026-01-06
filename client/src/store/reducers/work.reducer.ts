@@ -46,7 +46,7 @@ export const worksReducer = createSlice({
         },
         createWorkSuccess(state, action: PayloadAction<IWork>) {
             state.isCreating = false;
-            state.works = [...state.works, action.payload];
+            state.works = state.works ? [...state.works, action.payload] : [action.payload];
         },
         createWorkFail(state) {
             state.isCreating = false;
@@ -56,7 +56,7 @@ export const worksReducer = createSlice({
         },
         updateWorkSuccess(state, action: PayloadAction<IWork>) {
             state.isCreating = false;
-            state.works = [...state.works.filter(el => el.id !== action.payload.id), action.payload];
+            state.works = state.works ? [...state.works.filter(el => el.id !== action.payload.id), action.payload] : [action.payload];
         },
         updateWorkFail(state) {
             state.isUpdating = false;
@@ -66,7 +66,7 @@ export const worksReducer = createSlice({
         },
         deleteWorkSuccess(state, action: PayloadAction<number>) {
             state.isDeleting = false;
-            state.wors = state.works.filter(el => el.id !== action.payload);
+            state.works = state.works && state.works.filter(el => el.id !== action.payload);
         },
         deleteWorkFail(state) {
             state.isDeleting = false;

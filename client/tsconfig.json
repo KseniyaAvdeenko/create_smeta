@@ -17,8 +17,6 @@
     "jsx": "react-jsx",
     "types": ["vite/client"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "global.d.ts",
-    "electron.d.ts"
-  ]
+  "include": ["src", "electron.d.ts", "global.d.ts"],
+  "exclude": ["node_modules"]
 }
