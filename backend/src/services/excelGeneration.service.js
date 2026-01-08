@@ -313,7 +313,7 @@ class ExcelGenerationService {
    */
   async generateSmetaFromOrder(order, orderWorks) {
     const orderData = {
-      address: order.address || order.name,
+      name: order.name,
       clientName: order.clientName || order.client_name,
       date: order.createdAt || order.created_at || new Date(),
       works: orderWorks.map(ow => ({

@@ -1,8 +1,13 @@
 {
     "scripts": {
-      "start": "npm run dev-react && npm run dev-electron",
-      "dev-electron": "cd backend && npm run move-build && npm run start:dev",
-      "dev-react": "cd client && npm run build && cd ../backend && npm run move-build",
-      "build": "cd client && npm run build && cd ../backend && npm run move-build && npm run make"
+      "dev": "concurrently -n \"CLIENT,ELECTRON\" -c \"cyan,magenta\" \"npm run dev:client\" \"npm run dev:electron\"",
+      "dev:client": "cd client && npm run dev",
+      "dev:electron": "cd backend && npm run electron:dev",
+      "build": "cd client && npm run build && cd ../backend && npm run move-build && npm run make",
+      "start:prod": "cd backend && npm run start:prod"
+    },
+    "devDependencies": {
+      "concurrently": "^8.2.2",
+      "cross-env": "^7.0.3"
     }
   }

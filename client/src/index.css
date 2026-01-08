@@ -60,53 +60,48 @@ h6 {
     position: relative;
 }
 
-@media (prefers-color-scheme: light) {
-    body {
-        background: #ffffff;
-        color: #0F1C2E;
-    }
-
-    ::-webkit-scrollbar {
-        background-color: #eee;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: #929292;
-        border-radius: 1rem;
-        -webkit-box-shadow: inset 1px 1px 10px #f3faf7;
-        box-shadow: inset 1px 1px 10px #f3faf7;
-    }
-
-    ::-webkit-scrollbar-button:vertical:start:decrement,
-    ::-webkit-scrollbar-button:vertical:end:increment,
-    ::-webkit-scrollbar-button:horizontal:start:decrement,
-    ::-webkit-scrollbar-button:horizontal:end:increment {
-        background: #929292;
-    }
+body {
+    background: #ffffff;
+    color: #0F1C2E;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+[data-theme="dark"] body {
+    background: #0F1C2E;
+    color: #ffffff;
+}
 
-@media (prefers-color-scheme: dark) {
-    body {
-        background: #0F1C2E;
-        color: #ffffff;
-    }
+::-webkit-scrollbar {
+    background-color: #eee;
+}
 
-    ::-webkit-scrollbar {
-        background-color: #1F3A5F;
-    }
+[data-theme="dark"] ::-webkit-scrollbar {
+    background-color: #1F3A5F;
+}
 
-    ::-webkit-scrollbar-thumb {
-        background-color: #3D5A80;
-        border-radius: 1rem;
-        -webkit-box-shadow: inset 1px 1px 10px #3D5A80;
-        box-shadow: inset 1px 1px 10px #3D5A80;
-    }
+::-webkit-scrollbar-thumb {
+    background-color: #929292;
+    border-radius: 1rem;
+    -webkit-box-shadow: inset 1px 1px 10px #f3faf7;
+    box-shadow: inset 1px 1px 10px #f3faf7;
+}
 
-    ::-webkit-scrollbar-button:vertical:start:decrement,
-    ::-webkit-scrollbar-button:vertical:end:increment,
-    ::-webkit-scrollbar-button:horizontal:start:decrement,
-    ::-webkit-scrollbar-button:horizontal:end:increment {
-        background: #1F3A5F;
-    }
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background-color: #3D5A80;
+    -webkit-box-shadow: inset 1px 1px 10px #3D5A80;
+    box-shadow: inset 1px 1px 10px #3D5A80;
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:decrement,
+::-webkit-scrollbar-button:horizontal:end:increment {
+    background: #929292;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-button:vertical:start:decrement,
+[data-theme="dark"] ::-webkit-scrollbar-button:vertical:end:increment,
+[data-theme="dark"] ::-webkit-scrollbar-button:horizontal:start:decrement,
+[data-theme="dark"] ::-webkit-scrollbar-button:horizontal:end:increment {
+    background: #1F3A5F;
 }

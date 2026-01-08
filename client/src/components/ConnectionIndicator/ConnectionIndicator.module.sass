@@ -1,0 +1,105 @@
+@use '../../assets/styles/common' as *
+
+.indicator
+  @include flex(row, center, center)
+  gap: 0.8rem
+  padding: 0.5rem 1rem
+  border-radius: 0.6rem
+  background: rgba($accent, 0.1)
+  border: 0.1rem solid rgba($accent, 0.3)
+  @include transition(all)
+
+  [data-theme="dark"] &
+    background: rgba($primary, 0.2)
+    border-color: rgba($primary, 0.4)
+
+  &:hover
+    background: rgba($accent, 0.15)
+    @include boxShadow(0 0.2rem 0.6rem rgba($accent, 0.2))
+
+    [data-theme="dark"] &
+      background: rgba($primary, 0.25)
+      @include boxShadow(0 0.2rem 0.6rem rgba($primary, 0.3))
+
+.statusContainer
+  @include flex(row, center, center)
+  gap: 0.8rem
+  position: relative
+  align-items: center
+
+.dotWrapper
+  position: relative
+  width: 1.4rem
+  height: 1.4rem
+  display: flex
+  align-items: center
+  justify-content: center
+
+.dot
+  position: relative
+  width: 1rem
+  height: 1rem
+  border-radius: 50%
+  @include transition(all)
+  flex-shrink: 0
+  z-index: 2
+
+  &.connected
+    background: linear-gradient(135deg, $accent 0%, lighten($accent, 10%) 100%)
+    @include boxShadow(0 0 0.4rem rgba($accent, 0.6))
+
+  &.disconnected
+    background: linear-gradient(135deg, darken($primary, 15%) 0%, darken($primary, 20%) 100%)
+    @include boxShadow(0 0 0.4rem rgba($primary, 0.6))
+
+.pulse
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  width: 1.4rem
+  height: 1.4rem
+  border-radius: 50%
+  animation: pulse 2s infinite ease-out
+  z-index: 1
+
+  .connected &
+    border: 0.15rem solid rgba($accent, 0.5)
+
+  .disconnected &
+    border: 0.15rem solid rgba($primary, 0.5)
+
+@keyframes pulse
+  0%
+    transform: translate(-50%, -50%) scale(1)
+    opacity: 1
+  100%
+    transform: translate(-50%, -50%) scale(2)
+    opacity: 0
+
+.text
+  font-size: 1.2rem
+  font-weight: 600
+  color: $textDark
+  @include transition(all)
+  text-transform: uppercase
+  letter-spacing: 0.08rem
+
+  [data-theme="dark"] &
+    color: $textLight
+
+  &.connected
+    color: $accent
+
+    [data-theme="dark"] &
+      color: lighten($accent, 15%)
+
+  &.disconnected
+    color: darken($primary, 10%)
+
+    [data-theme="dark"] &
+      color: lighten($primary, 20%)
+
+  .indicator:hover &
+    opacity: 0.8
+

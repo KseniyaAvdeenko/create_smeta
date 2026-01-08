@@ -5,6 +5,18 @@ const installExtension = require('electron-devtools-installer');
 const DbHandler = require('./db.handler');
 
 async function createMainWindow() {
+    const isDev = process.env.NODE_ENV === 'dev';
+
+    // Подавляем CSP предупреждение в dev режиме
+    if (isDev) {
+        const {session} = require('electron');
+        session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+            const responseHeaders = {...details.responseHeaders};
+            delete responseHeaders['content-security-policy'];
+            callback({responseHeaders});
+        });
+    }
+
     const primaryDisplay = screen.getPrimaryDisplay()
     const {width, height} = primaryDisplay.workAreaSize;
     const mainWindow = new BrowserWindow({
@@ -23,6 +35,7 @@ async function createMainWindow() {
             contextIsolation: true,
             nodeIntegration: false,
             devTools: true,
+            webSecurity: true,
         },
     });
 
@@ -49,35 +62,58 @@ async function createMainWindow() {
             devTools: false
         },
     })
-    
+
     preloading.loadFile(path.join(__dirname, '../index.html'))
     preloading.center()
+    console.log('isDev', isDev)
+    if (isDev) {
+        // Проверяем доступность Vite dev server
+        const http = require('http');
+        const checkDevServer = () => {
+            return new Promise((resolve) => {
+                const req = http.get('http://localhost:5173', (res) => {
+                    resolve(true);
+                });
+                req.on('error', () => resolve(false));
+                req.setTimeout(1000, () => {
+                    req.destroy();
+                    resolve(false);
+                });
+            });
+        };
 
-
-    const [disk, folder1, folder2, prodFolder] = path.join(__dirname, '').split('\\')
-    const mainWindowPath = disk + '\\' + folder1 + '\\' + folder2 + '\\' + prodFolder + '\\' + 'client\\build\\index.html'
-    mainWindow.loadURL(path.join(__dirname, '../build/index.html'));
+        const serverAvailable = await checkDevServer();
+        if (serverAvailable) {
+            console.log('serverAvailable', serverAvailable)
+            mainWindow.loadURL('http://localhost:5173');
+        } else {
+            console.warn('Vite dev server не запущен на порту 5173, загружаю build файл');
+            mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
+        }
+    } else {
+        mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
+    }
+    // preloading.close();
     // mainWindow.center()
-    // mainWindow
-    mainWindow.setBackgroundMaterial('acrylic')
+    // mainWindow.setBackgroundMaterial('acrylic')
 
     Menu.setApplicationMenu(null);
     // Open the DevTools.
-// mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
     //preloading.webContents.openDevTools();
     // -------------------------------------
 
     const openMainWindow = () => {
         if (!preloading.isDestroyed()) preloading.close();
         mainWindow.show();
-      };
-   
-      const dbConnection = await new DbHandler().getDbConnection();
-      
-      await isOnline() && dbConnection
-       ?setTimeout(openMainWindow, 5000) 
-        :setTimeout(openMainWindow, 3000)
-     
+    };
+
+    const dbConnection = await new DbHandler().getDbConnection();
+
+    await isOnline() && dbConnection
+        ? setTimeout(openMainWindow, 1000)
+        : setTimeout(openMainWindow, 1000)
+
     // installExtension.default(installExtension.REDUX_DEVTOOLS)
     //     .then((name) => console.log(`Added Extension: ${name}`))
     //     .catch((err) => console.log('An error occurred:', err));

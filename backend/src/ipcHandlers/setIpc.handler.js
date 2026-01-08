@@ -19,9 +19,9 @@ function setIpcHandlers() {
     ipcMain.handle('connected', async (_) => await isOnline())
 
     //theme modes
-    ipcMain.handle('mode:initial', ThemeModesHandler.getInitialThemeMode);
-    ipcMain.handle('mode:dark', ThemeModesHandler.getDarkMode);
-    ipcMain.handle('mode:light', ThemeModesHandler.getLightMode);
+    ipcMain.handle('mode:initial', () => ThemeModesHandler.getInitialThemeMode());
+    ipcMain.handle('mode:dark', () => ThemeModesHandler.getDarkMode());
+    ipcMain.handle('mode:light', () => ThemeModesHandler.getLightMode());
     //appSizes
     ipcMain.handle('screen', async (_) => await screen.getPrimaryDisplay().workAreaSize);
 
@@ -36,18 +36,18 @@ function setIpcHandlers() {
 
     //WorkCategory
     ipcMain.handle('workCategory:getAll', async (_) => await new DbHandler().workCategoryRepository.getAll());
-    ipcMain.handle('workCategory:getById', async (_, id) => await  new DbHandler().workCategoryRepository.getById(id));
-    ipcMain.handle('workCategory:create', async (_, workCategoryData) => await  new DbHandler().workCategoryRepository.create(workCategoryData));
-    ipcMain.handle('workCategory:update', async (_, id, updateData) => await  new DbHandler().workCategoryRepository.update(id, updateData));
-    ipcMain.handle('workCategory:delete', async (_, id) => await  new DbHandler().workCategoryRepository.delete(id));
+    ipcMain.handle('workCategory:getById', async (_, id) => await new DbHandler().workCategoryRepository.getById(id));
+    ipcMain.handle('workCategory:create', async (_, workCategoryData) => await new DbHandler().workCategoryRepository.create(workCategoryData));
+    ipcMain.handle('workCategory:update', async (_, id, updateData) => await new DbHandler().workCategoryRepository.update(id, updateData));
+    ipcMain.handle('workCategory:delete', async (_, id) => await new DbHandler().workCategoryRepository.delete(id));
 
     //Works
     ipcMain.handle('works:getAll', async () => await new DbHandler(_).measurementRepository.getAll());
-    ipcMain.handle('works:getById', async (_, id) => await  new DbHandler().workRepository.getById(id));
-    ipcMain.handle('works:getByCategory', async (_, category) => await  new DbHandler().workRepository.findByCategory(category));
-    ipcMain.handle('works:create', async (_, workData) => await  new DbHandler().workRepository.create(workData));
-    ipcMain.handle('works:update', async (_, id, updateData) => await  new DbHandler().workRepository.update(id, updateData));
-    ipcMain.handle('works:delete', async (_, id) => await  new DbHandler().workRepository.delete(id));
+    ipcMain.handle('works:getById', async (_, id) => await new DbHandler().workRepository.getById(id));
+    ipcMain.handle('works:getByCategory', async (_, category) => await new DbHandler().workRepository.findByCategory(category));
+    ipcMain.handle('works:create', async (_, workData) => await new DbHandler().workRepository.create(workData));
+    ipcMain.handle('works:update', async (_, id, updateData) => await new DbHandler().workRepository.update(id, updateData));
+    ipcMain.handle('works:delete', async (_, id) => await new DbHandler().workRepository.delete(id));
 
     //Orders
     ipcMain.handle('orders:getAll', async (_) => await new DbHandler().orderRepository.getAll());

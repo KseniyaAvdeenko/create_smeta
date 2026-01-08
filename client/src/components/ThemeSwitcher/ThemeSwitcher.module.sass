@@ -1,0 +1,92 @@
+@use '../../assets/styles/common' as *
+
+.switcher
+  border: none
+  background: transparent
+  padding: 0
+  cursor: pointer
+  outline: none
+  @extend .pointer
+  position: relative
+
+.track
+  position: relative
+  width: 6.4rem
+  height: 3.2rem
+  border-radius: 1.6rem
+  @include transition(all)
+  overflow: hidden
+  display: flex
+  align-items: center
+  padding: 0.3rem
+
+  &.light
+    background: linear-gradient(135deg, lighten($accent, 10%) 0%, $accent 50%, $primary 100%)
+    @include boxShadow(0 0.2rem 0.8rem rgba($primary, 0.3))
+    border: 0.15rem solid rgba(255, 255, 255, 0.3)
+
+  &.dark
+    background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 50%, $bgDark 100%)
+    @include boxShadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.5))
+    border: 0.15rem solid rgba(255, 255, 255, 0.1)
+
+.thumb
+  position: absolute
+  top: 0.3rem
+  width: 2.6rem
+  height: 2.6rem
+  border-radius: 50%
+  @include transition(all)
+  display: flex
+  align-items: center
+  justify-content: center
+  z-index: 2
+
+  &.thumbLight
+    left: 0.3rem
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%)
+    @include boxShadowTriple(0 0.2rem 0.6rem rgba(255, 215, 0, 0.4), 0 0 0.2rem rgba(255, 255, 255, 0.5), inset 0 0.1rem 0.2rem rgba(255, 255, 255, 0.3))
+    transform: translateX(0) scale(1)
+
+  &.thumbDark
+    left: 0.3rem
+    background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%)
+    @include boxShadowTriple(0 0.2rem 0.6rem rgba(0, 0, 0, 0.4), 0 0 0.2rem rgba(255, 255, 255, 0.2), inset 0 0.1rem 0.2rem rgba(255, 255, 255, 0.1))
+    transform: translateX(3.2rem) scale(1)
+
+.icon
+  font-size: 1.6rem
+  line-height: 1
+  user-select: none
+  filter: drop-shadow(0 0.1rem 0.2rem rgba(0, 0, 0, 0.3))
+  @include transition(all)
+
+.switcher:hover
+  .track
+    &.light
+      @include boxShadow(0 0.3rem 1rem rgba($primary, 0.4))
+      transform: scale(1.02)
+
+    &.dark
+      @include boxShadow(0 0.3rem 1rem rgba(0, 0, 0, 0.6))
+      transform: scale(1.02)
+
+  .thumb
+    &.thumbLight
+      @include boxShadowDouble(0 0.3rem 0.8rem rgba(255, 215, 0, 0.5), 0 0 0.3rem rgba(255, 255, 255, 0.6))
+      transform: translateX(0) scale(1.05)
+
+    &.thumbDark
+      @include boxShadowDouble(0 0.3rem 0.8rem rgba(0, 0, 0, 0.5), 0 0 0.3rem rgba(255, 255, 255, 0.3))
+      transform: translateX(3.2rem) scale(1.05)
+
+  .icon
+    transform: rotate(15deg) scale(1.1)
+
+.switcher:active
+  .thumb
+    transform: scale(0.92) !important
+
+  .icon
+    transform: rotate(0deg) scale(0.95) !important
+

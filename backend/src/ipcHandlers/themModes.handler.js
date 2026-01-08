@@ -6,15 +6,13 @@ class ThemModesHandler {
         return nativeTheme.shouldUseDarkColors
     }
 
-    static getDarkMode(callback=null) {
+    static getDarkMode() {
         if (!nativeTheme.shouldUseDarkColors) nativeTheme.themeSource = 'dark'
-        if(callback) callback();        
         return nativeTheme.shouldUseDarkColors
     }
 
-    static getLightMode(callback=null) {
+    static getLightMode() {
         if (nativeTheme.shouldUseDarkColors) nativeTheme.themeSource = 'light'
-        if(callback) callback();
         return nativeTheme.shouldUseDarkColors
     }
 }
