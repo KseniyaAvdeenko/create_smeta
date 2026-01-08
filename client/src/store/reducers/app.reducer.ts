@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IApp, Theme} from "../../interface/IApp";
+import {IApp, Theme, Screen} from "../../interface/IApp";
 
 
 const initialState: IApp = {
@@ -23,6 +23,9 @@ export const appReducer = createSlice({
         loadNetworkConnection(state, action: PayloadAction<boolean>) {
             state.isConnected = action.payload;
         },
+        loadScreenSizes(state, action: PayloadAction<Screen>){
+            state.screen = action.payload;
+        }
     }
 })
 

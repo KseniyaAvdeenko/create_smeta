@@ -3,6 +3,8 @@ import {useAppSelector} from "../../hooks/useAppSelector";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {getNetworkConnection} from "../../store/actions/app.action";
 import styles from './ConnectionIndicator.module.sass';
+import {connectedIcon, disConnectedIcon} from "../../assets/icons/icons";
+
 
 const ConnectionIndicator = () => {
     const {isConnected} = useAppSelector(state => state.appReducer);
@@ -10,7 +12,7 @@ const ConnectionIndicator = () => {
 
     useEffect(() => {
         dispatch(getNetworkConnection());
-        
+
         // Проверяем подключение каждые 5 секунд
         const interval = setInterval(() => {
             dispatch(getNetworkConnection());
@@ -20,16 +22,9 @@ const ConnectionIndicator = () => {
     }, [dispatch]);
 
     return (
-        <div className={styles.indicator} title={isConnected ? 'Подключено к интернету' : 'Нет подключения к интернету'}>
-            <div className={styles.statusContainer}>
-                <div className={styles.dotWrapper}>
-                    <div className={`${styles.dot} ${isConnected ? styles.connected : styles.disconnected}`}></div>
-                    <span className={styles.pulse}></span>
-                </div>
-                <span className={`${styles.text} ${isConnected ? styles.connected : styles.disconnected}`}>
-                    {isConnected ? 'Онлайн' : 'Офлайн'}
-                </span>
-            </div>
+        <div className={styles.statusContainer}
+             title={isConnected ? 'Подключено к интернету' : 'Нет подключения к интернету'}>
+            {isConnected ? connectedIcon(styles.icon_connected) : disConnectedIcon(styles.icon_disconnected)}
         </div>
     );
 };

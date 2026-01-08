@@ -85,7 +85,8 @@ async function createMainWindow() {
         const serverAvailable = await checkDevServer();
         if (serverAvailable) {
             console.log('serverAvailable', serverAvailable)
-            mainWindow.loadURL('http://localhost:5173');
+            await mainWindow.loadURL('http://localhost:5173');
+            mainWindow.webContents.openDevTools();
         } else {
             console.warn('Vite dev server не запущен на порту 5173, загружаю build файл');
             mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
@@ -99,7 +100,7 @@ async function createMainWindow() {
 
     Menu.setApplicationMenu(null);
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+
     //preloading.webContents.openDevTools();
     // -------------------------------------
 

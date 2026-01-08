@@ -1,0 +1,31 @@
+@use '../../assets/styles/common' as *
+
+.sidebar
+  @include flex(column, start, start)
+  gap: 2rem
+  padding: 1rem
+  border-right: .1rem solid $bgDark
+  //[data-theme="dark"] &
+  //  //@include boxShadow(5px 0 10px 5px rgba(206, 232, 255, 0.3))
+  //  border-right: .1rem solid $primary200
+
+.link
+  text-decoration: none
+  color: $primary
+  @include flex(row, start, center)
+  gap: 1rem
+
+  [data-theme="dark"] &
+    color: $text200
+
+  & > svg > path
+    stroke: $primary
+
+    [data-theme="dark"] &
+      stroke: $text200
+
+  &_active, &:hover
+    color: $primary300 !important
+
+  &:hover > svg > path, &_active > svg > path
+    stroke: $primary300 !important

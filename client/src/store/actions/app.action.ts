@@ -20,3 +20,7 @@ export const getNetworkConnection = () => async (dispatch: AppDispatch) => {
     if (!data) dispatch(appReducer.actions.loadNetworkConnection(false));
     dispatch(appReducer.actions.loadNetworkConnection(data));
 }
+export const getScreenSizes = () => async (dispatch: AppDispatch) => {
+    const data = await window.electron.screen();
+    dispatch(appReducer.actions.loadScreenSizes(data))
+}

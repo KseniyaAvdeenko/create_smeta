@@ -2,14 +2,31 @@
 
 .header
   @include flex(row, flex-end, center)
-  padding: .7rem 2rem
-  gap: 2rem
-  border-bottom: .1rem solid $accent
+  padding: 1rem 2rem
+  gap: 1.5rem
   color: $textDark
-  background: $bgLight
-  @include transition(background-color)
+  background: rgba($accent200, 0.3)
+  backdrop-filter: blur(1.2rem)
+  @include boxShadow(0 4px 10px 4px rgba($bgDark, 0.1))
+  @include transition(all)
+  position: relative
+  z-index: 100
+
+  
+  //&::before
+  //  content: ''
+  //  position: absolute
+  //  bottom: 0
+  //  left: 0
+  //  right: 0
+  //  height: 0.1rem
+  //  background: linear-gradient(90deg, transparent 0%, rgba($accent, 0.4) 50%, transparent 100%)
+  //  opacity: 0.6
 
   [data-theme="dark"] &
-    background: $bgDark
+    background: rgba($bgDark, 0.95)
     color: $textLight
-    border-bottom-color: $primary
+    @include boxShadow(0 4px 10px 4px rgba($primary300, 0.1))
+    
+    &::before
+      background: linear-gradient(90deg, transparent 0%, rgba($primary200, 0.5) 50%, transparent 100%)

@@ -49,7 +49,7 @@ function setIpcHandlers() {
     ipcMain.handle('works:update', async (_, id, updateData) => await new DbHandler().workRepository.update(id, updateData));
     ipcMain.handle('works:delete', async (_, id) => await new DbHandler().workRepository.delete(id));
 
-    //Orders
+    //Estimates
     ipcMain.handle('orders:getAll', async (_) => await new DbHandler().orderRepository.getAll());
     ipcMain.handle('orders:getByIdWithDetails', async (_, id) => await new DbHandler().orderRepository.getOrderWithDetails(id));
     ipcMain.handle('orders:create', async (_, orderData) => await new DbHandler().orderRepository.create(orderData));

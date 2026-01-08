@@ -21,12 +21,12 @@
   padding: 0.3rem
 
   &.light
-    background: linear-gradient(135deg, lighten($accent, 10%) 0%, $accent 50%, $primary 100%)
+    background: linear-gradient(135deg, $accent, $accent 50%, $primary 100%)
     @include boxShadow(0 0.2rem 0.8rem rgba($primary, 0.3))
     border: 0.15rem solid rgba(255, 255, 255, 0.3)
 
   &.dark
-    background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 50%, $bgDark 100%)
+    background: linear-gradient(135deg, $primary 0%, $primary 50%, $bgDark 100%)
     @include boxShadow(0 0.2rem 0.8rem rgba(0, 0, 0, 0.5))
     border: 0.15rem solid rgba(255, 255, 255, 0.1)
 

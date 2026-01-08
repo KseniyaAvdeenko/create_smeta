@@ -1,8 +1,9 @@
 import {IMeasurement, IWork, IWorkBase, IWorkCategory, IWorkCategoryBase} from "./src/interface/ISmetaWorks";
 import {IOrder, IOrderBase, IOrderWork, IOrderWorkBase, ISavedFile, ISavedFileBase} from "./src/interface/ISmetaOrders";
+import {Screen} from "./src/interface/IApp";
 
 export type ElectronApi = {
-    screen: () => Promise<{ width: number, height: number }>
+    screen: () => Promise<Screen>
     dark: () => Promise<void>;
     light: () => Promise<void>;
     initial: () => Promise<boolean>;
