@@ -8,22 +8,22 @@ import MainPage from "./pages/MainPage";
 import Layout from "./components/Layout/layout";
 import Estimates from "./pages/Estimates";
 import EstimateSettings from "./pages/EstimateSettings";
+import {getOrders} from "./store/actions/order.action";
 
 
 function App() {
     const {currentMode, screen} = useAppSelector(state => state.appReducer);
-    const [colorMetaTag] = useState<HTMLElement | null>(() => document.getElementById('theme-color-meta') as HTMLElement | null);
+    const [colorMetaTag] = useState<HTMLMetaElement | null>(() => document.getElementById('theme-color-meta') as HTMLMetaElement | null);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(getScreenSizes())
-        dispatch(getCurrentThemeMode())
+        dispatch(getCurrentThemeMode());
+        dispatch(getOrders())
     }, [dispatch])
 
     useEffect(() => {
-        if (colorMetaTag) {
-            colorMetaTag.content = currentMode === 'light' ? '#ffffff' : '#0F1C2E';
-        }
+        if (colorMetaTag) colorMetaTag.content = currentMode === 'light' ? '#ffffff' : '#0F1C2E';
         document.documentElement.setAttribute('data-theme', currentMode || 'light');
         // if(screen.width && screen.height) {
         //     document.body.style.height = `${screen.height-40}px`;

@@ -3,6 +3,7 @@
       "dev": "concurrently -n \"CLIENT,ELECTRON\" -c \"cyan,magenta\" \"npm run dev:client\" \"npm run dev:electron\"",
       "dev:client": "cd client && npm run dev",
       "dev:electron": "cd backend && npm run electron:dev",
+      "build:dev": "cd client && npm run build && cd ../backend && npm run move-build",
       "build": "cd client && npm run build && cd ../backend && npm run move-build && npm run make",
       "start:prod": "cd backend && npm run start:prod"
     },

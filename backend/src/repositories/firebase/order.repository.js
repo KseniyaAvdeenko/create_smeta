@@ -16,6 +16,7 @@ class FirebaseOrderRepository extends FirebaseArrayDocRepository {
         this.savedFileRepo = new FirebaseSavedFileRepository(firestoreDb);
     }
 
+
     async getOrderWithDetails(orderId) {
         const order = await this.getById(orderId);
         if (!order) return null;

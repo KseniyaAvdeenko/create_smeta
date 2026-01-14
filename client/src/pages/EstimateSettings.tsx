@@ -1,8 +1,9 @@
 import React from 'react';
+import styles from "./pages.module.sass";
 
 const EstimateSettings = () => {
     return (
-        <div>
+        <div className={styles.estimatesSettings}>
             estimate settings
         </div>
     );

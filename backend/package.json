@@ -4,9 +4,9 @@
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
-    "start:dev": "electron-forge start NODE_ENV=dev",
+    "start:dev": "cross-env NODE_ENV=dev electron-forge start NODE_ENV=dev",
     "start:prod": "electron-forge start NODE_ENV=prod",
-    "electron:dev": "cross-env NODE_ENV=dev electron src/index.js",
+    "electron:dev": "cross-env NODE_ENV=dev electron .",
     "package": "electron-forge package NODE_ENV=prod",
     "make": "electron-forge make NODE_ENV=prod",
     "publish": "electron-forge publish",

@@ -11,7 +11,7 @@ const Sidebar = () => {
                 <NavLink
                     className={({isPending,isActive, isTransitioning}) =>
                         isPending || isActive || isTransitioning ? [styles.link, styles.link_active].join(' ') : styles.link
-                    }
+                    } key={name}
                     to={path}
                 >
                     {icon(bg)}

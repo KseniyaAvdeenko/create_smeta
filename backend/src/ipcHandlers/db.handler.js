@@ -6,6 +6,7 @@ const {db: firebaseDb} = require('../db/firebase/firebase.client');
 const {app} = require("electron");
 const path = require("path");
 const process = require("node:process");
+
 require('dotenv').config(
     {
         path: app.isPackaged
@@ -17,13 +18,21 @@ require('dotenv').config(
 class DbHandler {
     constructor() {
         this.mode = (process.env.DB_MODE || 'sql').toLowerCase(); // 'sql' | 'firebase'
-
         if (this.mode === 'sql') {
             this.dbClient = new SqlDatabaseClient(postgresConfig);
             this.repositories = createSqlRepositories(this.dbClient.models);
         } else if (this.mode === 'firebase') {
-            this.dbClient = null;
-            this.repositories = createFirebaseRepositories(firebaseDb);
+            this.dbClient = firebaseDb;
+            this.repositories = createFirebaseRepositories(this.dbClient);
+            // this.repositories = {
+            //     workRepository: new FirebaseWorkRepository(this.dbClient),
+            //     workCategoryRepository: new FirebaseWorkCategoryRepository(this.dbClient),
+            //     measurementRepository: new FirebaseMeasurementRepository(this.dbClient),
+            //     orderRepository: new FirebaseOrderRepository(this.dbClient),
+            //     orderWorkRepository: new FirebaseOrderWorkRepository(this.dbClient),
+            //     savedFileRepository: new FirebaseSavedFileRepository(this.dbClient),
+            // }
+            //console.log(this.repositories)
         } else {
             throw new Error(`Unsupported DB_MODE: ${this.mode}. Use "sql" or "firebase".`);
         }
@@ -85,8 +94,8 @@ class DbHandler {
     };
 
 
-    orderRepository() {
-        return this.repositories.orderRepository;
+    orderRepository() {console.log('dbHandler.order repo');
+        return this.repositories.orderRepository
     };
 
 

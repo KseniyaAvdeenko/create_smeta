@@ -89,10 +89,11 @@ async function createMainWindow() {
             mainWindow.webContents.openDevTools();
         } else {
             console.warn('Vite dev server не запущен на порту 5173, загружаю build файл');
-            mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
+            await mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
+            mainWindow.webContents.openDevTools();
         }
     } else {
-        mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
+        await mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
     }
     // preloading.close();
     // mainWindow.center()

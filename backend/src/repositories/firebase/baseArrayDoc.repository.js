@@ -28,7 +28,7 @@ class FirebaseArrayDocRepository {
   }
 
   async getAll() {
-    return this._loadArray();
+    return await this._loadArray();
   }
 
   async getById(id) {

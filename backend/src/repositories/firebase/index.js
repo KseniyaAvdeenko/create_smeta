@@ -19,20 +19,13 @@ const FirebaseSavedFileRepository = require('./savedFile.repository');
  * @param {import('firebase/firestore').Firestore} firestoreDb
  */
 function createFirebaseRepositories(firestoreDb = db) {
-  const workRepository = new FirebaseWorkRepository(firestoreDb);
-  const workCategoryRepository = new FirebaseWorkCategoryRepository(firestoreDb);
-  const measurementRepository = new FirebaseMeasurementRepository(firestoreDb);
-  const orderRepository = new FirebaseOrderRepository(firestoreDb);
-  const orderWorkRepository = new FirebaseOrderWorkRepository(firestoreDb);
-  const savedFileRepository = new FirebaseSavedFileRepository(firestoreDb);
-
   return {
-    workRepository,
-    workCategoryRepository,
-    measurementRepository,
-    orderRepository,
-    orderWorkRepository,
-    savedFileRepository,
+    workRepository: new FirebaseWorkRepository(firestoreDb),
+    workCategoryRepository: new FirebaseWorkCategoryRepository(firestoreDb),
+    measurementRepository: new FirebaseMeasurementRepository(firestoreDb),
+    orderRepository: new FirebaseOrderRepository(firestoreDb),
+    orderWorkRepository: new FirebaseOrderWorkRepository(firestoreDb),
+    savedFileRepository: new FirebaseSavedFileRepository(firestoreDb),
   };
 }
 
