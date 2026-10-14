@@ -1,28 +1,25 @@
-const {DataTypes} = require('sequelize');
+const {Model, DataTypes} = require('sequelize');
 
-function defineWorkCategory(sequelize) {
-    const WorkCategory = sequelize.define(
-        'WorkCategory',
+class WorkCategory extends Model {
+     static associate(models) {
+        WorkCategory.belongsTo(models.user, {as: 'user', foreignKey: 'userId'});
+        WorkCategory.hasMany(models.work, {as: 'works', foreignKey: 'categoryId'});
+    }
+}
+
+module.exports = (sequelize) => {
+    WorkCategory.init(
         {
-            id: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true,
-            },
-            name: {
-                type: DataTypes.STRING,
-                primaryKey: true,
-            },
+            id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+            userId: {type: DataTypes.INTEGER, index: true},
+            name: {type: DataTypes.STRING},
         },
         {
-            tableName: 'work_categories',
-            timestamps: false,
-        },
+            sequelize,
+            modelName: 'work_category',
+            tableName: 'work_category',
+        }
     );
 
     return WorkCategory;
-}
-
-module.exports = defineWorkCategory;
-
-
+};

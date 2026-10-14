@@ -1,4 +1,5 @@
 import {INotification} from "./IApp";
+import {IAuthInitial, GdriveStatus, UserSettings} from "./IAuth";
 import {IMeasurement, IWork, IWorkCategory} from "./ISmetaWorks";
 import {IOrder, IOrderWork, ISavedFile} from "./ISmetaOrders";
 
@@ -19,7 +20,20 @@ export interface INTFInitial {
     notifications: INotification[];
 }
 
-export interface IMeasurementInitial extends ILoad, ICreateDelete {
+export interface IAuthState extends IAuthInitial {}
+
+export interface IGdriveInitial {
+    status: GdriveStatus | null;
+    isLoading: boolean;
+    isConnecting: boolean;
+    error: string | null;
+}
+
+export interface IUserSettingsInitial extends ILoad {
+    settings: UserSettings | null;
+}
+
+export interface IMeasurementInitial extends ILoad, ICreateDelete, IUpdate {
     measurements: IMeasurement[] | null;
     measurement: IMeasurement | null;
 }

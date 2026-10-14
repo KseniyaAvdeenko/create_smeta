@@ -1,6 +1,8 @@
 .idea
 backend/node_modules
 backend/out
+backend/.packager-tmp
+.electron-tmp
 client/node_modules
 backend/.env
 client/.env

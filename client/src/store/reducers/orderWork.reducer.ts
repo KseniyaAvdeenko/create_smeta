@@ -54,7 +54,7 @@ export const orderWorksReducer = createSlice({
             state.isUpdating = true;
         },
         updateOrderWorkSuccess(state, action: PayloadAction<IOrderWork>) {
-            state.isCreating = false;
+            state.isUpdating = false;
             state.orderWorks = state.orderWorks
                 ? [...state.orderWorks.filter(el => el.id !== action.payload.id), action.payload]
                 : [action.payload];

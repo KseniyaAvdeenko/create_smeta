@@ -1,36 +1,42 @@
 export interface IOrderBase {
     name: string;
-    client: string;
-    date: string;
-    works?:IOrderWork[]
-    files?: ISavedFile[]
+    client?: string;
 }
 
 export interface IOrder extends IOrderBase {
-    id: number
+    id: number;
+    createdBy?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    orderWorks?: IOrderWork[];
+    savedOrderFiles?: ISavedFile[];
 }
 
-export interface IMeasureQuantity {
-    measurement: string,
-    quantity: number
+export interface IOrderWorkQuantity {
+    id?: number;
+    orderWorkId?: number;
+    measurement: string;
+    quantity: number;
 }
 
 export interface IOrderWorkBase {
-    workId: number,
-    orderId: number,
-    measureQuantities: IMeasureQuantity[]
+    workId: number;
+    orderId: number;
+    total?: number;
+    orderWorkQuantities?: IOrderWorkQuantity[];
 }
 
-export interface IOrderWork extends IOrderBase {
-    id: number,
+export interface IOrderWork extends IOrderWorkBase {
+    id: number;
+    work?: import('./ISmetaWorks').IWork;
 }
 
-export interface ISavedFileBase{
+export interface ISavedFile {
+    id: number;
     orderId: number;
     name: string;
-    date: string;
-}
-
-export interface ISavedFile extends ISavedFileBase{
-     id: number
+    weblink: string;
+    gdriveFileId?: string | null;
+    createdBy?: number;
+    createdAt?: string;
 }

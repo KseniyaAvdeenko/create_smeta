@@ -1,2 +1,275 @@
-.main, .estimates, .estimatesSettings
-  width: calc(100% - 2rem)
+@use '../assets/styles/common' as *
+
+.page
+  max-width: 112rem
+  width: 100%
+  margin: 0 auto
+
+.pageHeader
+  margin-bottom: 2.4rem
+
+.pageTitle
+  margin: 0
+  font-size: 2.4rem
+  font-weight: 700
+
+.pageSubtitle
+  margin: 0.5rem 0 0
+  font-size: 1.4rem
+  opacity: 0.62
+
+.cardGrid
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr))
+  gap: 1.2rem
+
+.statCard
+  padding: 1.6rem
+  border-radius: 1.2rem
+  background: rgba($bgLight, 0.92)
+  border: 1px solid rgba($primary, 0.08)
+  box-shadow: 0 10px 30px rgba($bgDark, 0.04)
+
+  [data-theme="dark"] &
+    background: rgba($bg200, 0.72)
+    border-color: rgba($primary200, 0.12)
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18)
+
+.statLabel
+  font-size: 1.2rem
+  opacity: 0.62
+  margin-bottom: 0.6rem
+
+.statValue
+  font-size: 2.8rem
+  font-weight: 700
+  line-height: 1
+
+.panel
+  padding: 1.6rem
+  border-radius: 1.2rem
+  background: rgba($bgLight, 0.92)
+  border: 1px solid rgba($primary, 0.08)
+  box-shadow: 0 10px 30px rgba($bgDark, 0.04)
+
+  [data-theme="dark"] &
+    background: rgba($bg200, 0.72)
+    border-color: rgba($primary200, 0.12)
+
+.toolbar
+  @include flex(row, space-between, center)
+  gap: 1rem
+  margin-bottom: 1.2rem
+  flex-wrap: wrap
+
+.btn
+  @extend .commonButton
+  padding: 0.8rem 1.4rem
+  font-size: 1.3rem
+  background: $primary
+  color: $textLight
+
+.btnGhost
+  @extend .btn
+  background: transparent
+  color: inherit
+  border: 1px solid rgba($primary, 0.2)
+
+.btnDanger
+  @extend .btn
+  background: #c0392b
+
+.inlineActions
+  @include flex(row, start, center)
+  gap: 0.8rem
+  flex-wrap: wrap
+
+.inlineForm
+  @include flex(row, start, center)
+  gap: 0.8rem
+  flex-wrap: wrap
+  margin-bottom: 1.2rem
+
+.input, .select
+  flex: 1
+  min-width: 16rem
+  padding: 0.9rem 1.1rem
+  border-radius: 0.8rem
+  border: 1px solid rgba($primary, 0.14)
+  background: $bgLight
+  color: $textDark
+  font-size: 1.4rem
+  outline: none
+
+  [data-theme="dark"] &
+    background: $bg300
+    color: $textLight
+    border-color: rgba($primary200, 0.22)
+
+.stack
+  @include flex(column, start, stretch)
+  gap: 1.2rem
+
+.sectionTitle
+  margin: 0 0 1rem
+  font-size: 1.6rem
+  font-weight: 600
+
+.backLink
+  display: inline-block
+  margin-bottom: 0.8rem
+  font-size: 1.3rem
+  opacity: 0.7
+
+.qtyRow
+  @include flex(row, start, center)
+  gap: 0.8rem
+  min-width: 100%
+
+.qtyLabel
+  min-width: 5rem
+  font-size: 1.3rem
+  opacity: 0.75
+
+.warn
+  margin: 0
+  padding: 0.9rem 1.1rem
+  border-radius: 0.8rem
+  color: #c0392b
+  font-size: 1.3rem
+  background: rgba(#c0392b, 0.08)
+
+.ok
+  margin: 0
+  padding: 0.9rem 1.1rem
+  border-radius: 0.8rem
+  color: #27ae60
+  font-size: 1.3rem
+  background: rgba(#27ae60, 0.08)
+
+.hint
+  margin: 0
+  font-size: 1.3rem
+  opacity: 0.65
+
+.filesSection
+  @include flex(column, start, stretch)
+  gap: 1.4rem
+
+.fileLink
+  color: inherit
+  font-size: 1.4rem
+  font-weight: 500
+  word-break: break-all
+
+  &:hover
+    opacity: 0.8
+
+.list
+  @include flex(column, start, stretch)
+  gap: 0.8rem
+  list-style: none
+
+.listItem
+  @include flex(row, space-between, center)
+  gap: 1rem
+  padding: 1.2rem 1.4rem
+  border-radius: 0.9rem
+  background: rgba($accent200, 0.18)
+  border: 1px solid rgba($primary, 0.06)
+
+  [data-theme="dark"] &
+    background: rgba($bg300, 0.35)
+    border-color: rgba($primary200, 0.1)
+
+.listItemTitle
+  font-size: 1.5rem
+  font-weight: 600
+
+.listItemMeta
+  font-size: 1.2rem
+  opacity: 0.62
+  margin-top: 0.2rem
+
+.empty
+  padding: 2.4rem
+  text-align: center
+  opacity: 0.55
+
+.auth
+  flex: 1
+  min-height: 0
+  @include flex(column, center, center)
+  padding: 2rem
+  background: radial-gradient(circle at top, rgba($accent200, 0.35), transparent 55%)
+
+  [data-theme="dark"] &
+    background: radial-gradient(circle at top, rgba($bg200, 0.8), transparent 55%)
+
+.authCard
+  width: 100%
+  max-width: 40rem
+  padding: 3.2rem
+  border-radius: 1.6rem
+  background: rgba($bgLight, 0.95)
+  border: 1px solid rgba($primary, 0.08)
+  box-shadow: 0 20px 50px rgba($bgDark, 0.12)
+
+  [data-theme="dark"] &
+    background: rgba($bg200, 0.92)
+    border-color: rgba($primary200, 0.12)
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35)
+
+.authTitle
+  margin: 0 0 0.4rem
+  font-size: 2.8rem
+  text-align: center
+
+.authSubtitle
+  margin: 0 0 2.4rem
+  text-align: center
+  opacity: 0.62
+  font-size: 1.4rem
+
+.authForm
+  @include flex(column, center, stretch)
+  gap: 1rem
+
+.authHint
+  margin: 0 0 0.5rem
+  opacity: 0.75
+  font-size: 1.3rem
+
+.authInput
+  width: 100%
+  padding: 1.1rem 1.3rem
+  border: 1px solid rgba($primary, 0.14)
+  border-radius: 0.9rem
+  background: $bgLight
+  color: $textDark
+  font-size: 1.4rem
+  outline: none
+  @include transition(border-color)
+
+  &:focus
+    border-color: rgba($primary, 0.45)
+
+  [data-theme="dark"] &
+    background: $bg300
+    color: $textLight
+    border-color: rgba($primary200, 0.22)
+
+.authButton
+  @extend .commonButton
+  width: 100%
+  padding: 1.1rem 1.4rem
+  font-size: 1.4rem
+  background: $primary
+  color: $textLight
+  margin-top: 0.8rem
+
+.authError
+  margin: 1.2rem 0 0
+  color: #c0392b
+  font-size: 1.3rem
+  text-align: center

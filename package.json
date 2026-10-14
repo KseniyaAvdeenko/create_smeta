@@ -1,5 +1,6 @@
 {
     "scripts": {
+      "install:all": "npm install && npm install --prefix client && npm install --prefix backend",
       "dev": "concurrently -n \"CLIENT,ELECTRON\" -c \"cyan,magenta\" \"npm run dev:client\" \"npm run dev:electron\"",
       "dev:client": "cd client && npm run dev",
       "dev:electron": "cd backend && npm run electron:dev",

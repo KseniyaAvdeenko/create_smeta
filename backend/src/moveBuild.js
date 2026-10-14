@@ -8,16 +8,19 @@ console.log('destination', destination)
 
 async function moveFolder() {
     try {
-        // Удаляем старую папку, если она существует
+        if (!fs.existsSync(source)) {
+            throw new Error(`client/build не найден. Сначала: cd client && npm run build`);
+        }
+
         if (fs.existsSync(destination)) {
             await fs.remove(destination);
         }
 
-        // копируем папку
         await fs.copy(source, destination);
         console.log('✅ Папка успешно скопирована!');
     } catch (err) {
-        console.error('❌ Ошибка при копировании папки:', err);
+        console.error('❌ Ошибка при копировании папки:', err.message || err);
+        process.exit(1);
     }
 }
 

@@ -15,7 +15,7 @@ export const getMeasurements = () => async (dispatch: AppDispatch) => {
     }
 }
 
-export const getMeasurementById = (id: string) => async (dispatch: AppDispatch) =>{
+export const getMeasurementById = (id: number) => async (dispatch: AppDispatch) =>{
     try{
         const resp = await window.electron.getMeasurementById(id);
         dispatch(measurementReducer.actions.loadMeasurementSuccess(resp));
@@ -26,7 +26,7 @@ export const getMeasurementById = (id: string) => async (dispatch: AppDispatch) 
     }
 }
 
-export const createMeasurement = (data: IMeasurement) => async (dispatch: AppDispatch) =>{
+export const createMeasurement = (data: Omit<IMeasurement, 'id'>) => async (dispatch: AppDispatch) =>{
     try{
         dispatch(measurementReducer.actions.startCreating());
         const resp = await window.electron.createMeasurement(data);
@@ -39,7 +39,7 @@ export const createMeasurement = (data: IMeasurement) => async (dispatch: AppDis
     }
 }
 
-export const deleteMeasurement = (id: string) => async (dispatch: AppDispatch) =>{
+export const deleteMeasurement = (id: number) => async (dispatch: AppDispatch) =>{
     try{
         dispatch(measurementReducer.actions.startDeleting());
         const resp = await window.electron.deleteMeasurement(id);
@@ -51,3 +51,16 @@ export const deleteMeasurement = (id: string) => async (dispatch: AppDispatch) =
         new NtfAction(dispatch).addNotification({message: `Ошибка удаления единицы измерения ${id}`, type: 'error'});
     }
 }
+
+export const updateMeasurement = (id: number, data: Omit<IMeasurement, 'id'>) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(measurementReducer.actions.startUpdating());
+        const resp = await window.electron.updateMeasurement(id, data);
+        if (resp) dispatch(measurementReducer.actions.updateMeasurementSuccess(resp));
+        new NtfAction(dispatch).addNotification({message: 'Единица измерения обновлена', type: 'success'});
+    } catch (e) {
+        console.error(e);
+        dispatch(measurementReducer.actions.updateMeasurementFail());
+        new NtfAction(dispatch).addNotification({message: 'Ошибка обновления единицы измерения', type: 'error'});
+    }
+};

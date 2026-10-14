@@ -1,7 +1,7 @@
 import React from 'react';
 import {useAppSelector} from "../../hooks/useAppSelector";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {changeCurrentThemeMode} from "../../store/actions/app.action";
+import {saveThemeSetting} from "../../store/actions/userSettings.action";
 import styles from './ThemeSwitcher.module.sass';
 
 const ThemeSwitcher = () => {
@@ -10,7 +10,7 @@ const ThemeSwitcher = () => {
 
     const handleToggle = () => {
         const newTheme = currentMode === 'dark' ? 'light' : 'dark';
-        dispatch(changeCurrentThemeMode(newTheme));
+        dispatch(saveThemeSetting(newTheme));
     };
 
     return (

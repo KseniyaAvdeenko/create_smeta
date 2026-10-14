@@ -1,37 +1,38 @@
-const { DataTypes } = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 
-
-function defineOrder(sequelize) {
-  const Order = sequelize.define(
-    'Order',
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      client: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      date: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-    },
-    {
-      tableName: 'orders',
-      timestamps: false,
-    },
-  );
-
-  return Order;
+class Order extends Model {
+    static associate(models) {
+        Order.belongsTo(models.user, {as:'user', foreignKey:'createdBy'});
+        Order.hasMany(models.order_work, {as: 'orderWorks', foreignKey: 'orderId'});
+        Order.hasMany(models.save_order_file, {as: 'savedOrderFiles', foreignKey: 'orderId'})
+    }
 }
 
-module.exports = defineOrder;
+module.exports = (sequelize) => {
+    Order.init({
+            id: {
+                type: DataTypes.INTEGER,
+                autoIncrement: true,
+                primaryKey: true,
+            },
+            name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            client: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            createdBy: {type: DataTypes.INTEGER, index: true},
+        },
+        {
+            sequelize,
+            modelName: 'order',
+            tableName: 'orders',
+            timestamps: true,
+        })
+    return Order;
+}
+
 
 

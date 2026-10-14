@@ -1,7 +1,7 @@
 import {AppDispatch} from "../index";
 import NtfAction from "./ntf.action";
 import {orderReducer} from "../reducers/order.reducer";
-import {IOrderBase} from "../../interface/ISmetaOrders";
+import {IOrder, IOrderBase} from "../../interface/ISmetaOrders";
 
 export const getOrders = () => async (dispatch: AppDispatch) => {
     try{
@@ -26,24 +26,30 @@ export const getOrderById = (id: number) => async (dispatch: AppDispatch) =>{
     }
 }
 
-export const createOrder = (data: IOrderBase) => async (dispatch: AppDispatch) =>{
+export const createOrder = (data: IOrderBase) => async (dispatch: AppDispatch) => {
     try{
         dispatch(orderReducer.actions.startCreating());
         const resp = await window.electron.createOrder(data);
         dispatch(orderReducer.actions.createOrderSuccess(resp));
         new NtfAction(dispatch).addNotification({message: `Заказ (смета) создана`, type: 'success'});
+        return resp;
     }catch (e) {
         console.error(e)
         dispatch(orderReducer.actions.createOrderFail());
         new NtfAction(dispatch).addNotification({message: `Ошибка создания заказа (сметы)`, type: 'error'});
+        return null;
     }
 }
 
 export const updateOrder = (id: number, data: IOrderBase) => async (dispatch: AppDispatch) =>{
     try{
         dispatch(orderReducer.actions.startUpdating());
-        const resp = await window.electron.updateOrder(id, data);
-        dispatch(orderReducer.actions.updateOrderSuccess(resp));
+        await window.electron.updateOrder(id, data);
+        const refreshed = await window.electron.getOrderById(id);
+        if (refreshed) {
+            dispatch(orderReducer.actions.loadOrderSuccess(refreshed));
+        }
+        dispatch(orderReducer.actions.updateOrderSuccess(refreshed ?? ({id, ...data} as IOrder)));
         new NtfAction(dispatch).addNotification({message: `Заказ (смета) ${id} изменена`, type: 'success'});
     }catch (e) {
         console.error(e)

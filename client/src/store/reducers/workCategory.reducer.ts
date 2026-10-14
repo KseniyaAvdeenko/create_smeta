@@ -48,7 +48,7 @@ export const workCategoryReducer = createSlice({
             state.isUpdating = true;
         },
         updateWorkCategorySuccess(state, action: PayloadAction<IWorkCategory>) {
-            state.isCreating = false;
+            state.isUpdating = false;
             state.workCategories = state.workCategories
                 ? [...state.workCategories.filter(el => el.id !== action.payload.id), action.payload]
                 : [action.payload];

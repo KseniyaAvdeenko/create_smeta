@@ -8,6 +8,7 @@ const initialState: IMeasurementInitial = {
     measurement: null,
     isLoading: false,
     isCreating: false,
+    isUpdating: false,
     isDeleting: false,
 }
 
@@ -42,12 +43,25 @@ export const measurementReducer = createSlice({
         createMeasurementFail(state) {
             state.isCreating = false;
         },
+        startUpdating(state) {
+            state.isUpdating = true;
+        },
+        updateMeasurementSuccess(state, action: PayloadAction<IMeasurement>) {
+            state.isUpdating = false;
+            state.measurements = state.measurements
+                ? state.measurements.map(el => (el.id === action.payload.id ? action.payload : el))
+                : [action.payload];
+        },
+        updateMeasurementFail(state) {
+            state.isUpdating = false;
+        },
         startDeleting(state) {
             state.isDeleting = true;
         },
-        deleteMeasurementSuccess(state, action: PayloadAction<string>) {
+        deleteMeasurementSuccess(state, action: PayloadAction<number>) {
             state.isDeleting = false;
-            state.measurements =state.measurements && state.measurements.filter(el => el.id !== action.payload);
+            state.measurements =
+                state.measurements && state.measurements.filter(el => el.id !== action.payload);
         },
         deleteMeasurementFail(state) {
             state.isDeleting = false;

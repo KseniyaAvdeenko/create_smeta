@@ -1,10 +1,20 @@
-const {DataTypes} = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 
+class WorkMeasurement extends Model {
+    static associate(models) {
+        WorkMeasurement.belongsTo(models.work, {
+            foreignKey: 'workId',
+            as: 'work',
+        });
+        WorkMeasurement.belongsTo(models.measurement, {
+            foreignKey: 'measurementId',
+            as: 'measurement',
+        });
+    }
+}
 
-function defineWorkMeasurements(sequelize) {
-    const WorkMeasurements = sequelize.define(
-        'WorkMeasurement',
-        {
+module.exports = (sequelize) => {
+    WorkMeasurement.init({
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
@@ -24,14 +34,13 @@ function defineWorkMeasurements(sequelize) {
             },
         },
         {
+            sequelize,
+            modelName: 'work_measurement',
             tableName: 'work_measurements',
             timestamps: false,
-        },
-    );
+        });
+    return WorkMeasurement
+};
 
-    return WorkMeasurements;
-}
-
-module.exports = defineWorkMeasurements;
 
 

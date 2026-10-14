@@ -55,7 +55,7 @@ export const worksReducer = createSlice({
             state.isUpdating = true;
         },
         updateWorkSuccess(state, action: PayloadAction<IWork>) {
-            state.isCreating = false;
+            state.isUpdating = false;
             state.works = state.works ? [...state.works.filter(el => el.id !== action.payload.id), action.payload] : [action.payload];
         },
         updateWorkFail(state) {

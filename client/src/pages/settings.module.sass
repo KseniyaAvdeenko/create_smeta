@@ -1,0 +1,253 @@
+@use '../assets/styles/common' as *
+
+.page
+  max-width: 112rem
+  width: 100%
+  margin: 0 auto
+  height: 100%
+  @include flex(column, start, stretch)
+
+.header
+  margin-bottom: 2rem
+
+  h2
+    margin: 0
+    font-size: 2.4rem
+    font-weight: 700
+
+  p
+    margin: 0.5rem 0 0
+    opacity: 0.62
+    font-size: 1.4rem
+
+.layout
+  flex: 1
+  min-height: 0
+  display: grid
+  grid-template-columns: 20rem 1fr
+  gap: 1.6rem
+
+.tabs
+  @include flex(column, start, stretch)
+  gap: 0.4rem
+  padding: 1rem
+  border-radius: 1.2rem
+  background: rgba($bgLight, 0.92)
+  border: 1px solid rgba($primary, 0.08)
+  height: fit-content
+  position: sticky
+  top: 0
+
+  [data-theme="dark"] &
+    background: rgba($bg200, 0.72)
+    border-color: rgba($primary200, 0.12)
+
+.tab
+  padding: 0.9rem 1rem
+  border: none
+  border-radius: 0.8rem
+  background: transparent
+  color: inherit
+  font-size: 1.3rem
+  font-weight: 500
+  text-align: left
+  cursor: pointer
+  @include transition(all)
+
+  &:hover
+    background: rgba($accent200, 0.4)
+
+  [data-theme="dark"] &:hover
+    background: rgba($bg300, 0.55)
+
+  &_active
+    background: $primary
+    color: $textLight
+
+    [data-theme="dark"] &
+      background: $accent
+
+.content
+  min-height: 0
+  overflow: auto
+
+.panel
+  @include flex(column, start, stretch)
+  gap: 1.8rem
+
+.panelTitle
+  margin: 0
+  font-size: 1.8rem
+  font-weight: 600
+
+.panelHint
+  margin: 0.3rem 0 0
+  font-size: 1.3rem
+  opacity: 0.62
+
+.card
+  padding: 2rem
+  border-radius: 1.2rem
+  background: rgba($bgLight, 0.92)
+  border: 1px solid rgba($primary, 0.08)
+  box-shadow: 0 8px 24px rgba($bgDark, 0.04)
+  @include flex(column, start, stretch)
+  gap: 1.6rem
+
+  [data-theme="dark"] &
+    background: rgba($bg200, 0.72)
+    border-color: rgba($primary200, 0.12)
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18)
+
+.cardStack
+  @include flex(column, start, stretch)
+  gap: 1.4rem
+
+.cardActions
+  @include flex(row, start, center)
+  gap: 0.8rem
+  flex-wrap: wrap
+  padding-top: 0.4rem
+
+.form
+  @include flex(column, start, stretch)
+  gap: 1rem
+
+.formRow
+  @include flex(row, start, center)
+  gap: 0.8rem
+  flex-wrap: wrap
+
+.label
+  display: block
+  font-size: 1.2rem
+  font-weight: 600
+  opacity: 0.72
+  text-transform: uppercase
+  letter-spacing: 0.04em
+  margin-bottom: -0.4rem
+
+.input, .select
+  flex: 1
+  min-width: 14rem
+  padding: 0.9rem 1.1rem
+  border-radius: 0.8rem
+  border: 1px solid rgba($primary, 0.14)
+  background: $bgLight
+  color: $textDark
+  font-size: 1.4rem
+  outline: none
+
+  [data-theme="dark"] &
+    background: $bg300
+    color: $textLight
+    border-color: rgba($primary200, 0.22)
+
+  &:focus
+    border-color: rgba($primary, 0.45)
+
+.btn
+  @extend .commonButton
+  padding: 0.8rem 1.3rem
+  font-size: 1.3rem
+  background: $primary
+  color: $textLight
+
+  &:disabled
+    opacity: 0.55
+    cursor: not-allowed
+
+.btnGhost
+  @extend .btn
+  background: transparent
+  color: inherit
+  border: 1px solid rgba($primary, 0.2)
+
+.btnDanger
+  @extend .btn
+  background: #c0392b
+
+.btnSmall
+  padding: 0.55rem 0.9rem
+  font-size: 1.2rem
+
+.list
+  @include flex(column, start, stretch)
+  gap: 0.6rem
+
+.listItem
+  @include flex(row, space-between, center)
+  gap: 1rem
+  padding: 1rem 1.2rem
+  border-radius: 0.9rem
+  background: rgba($accent200, 0.16)
+  border: 1px solid rgba($primary, 0.06)
+
+  [data-theme="dark"] &
+    background: rgba($bg300, 0.35)
+    border-color: rgba($primary200, 0.1)
+
+.listItemMain
+  @include flex(column, start, start)
+  gap: 0.25rem
+  min-width: 0
+
+.listItemTitle
+  font-size: 1.4rem
+  font-weight: 600
+
+.listItemMeta
+  font-size: 1.2rem
+  opacity: 0.62
+
+.listItemActions
+  @include flex(row, end, center)
+  gap: 0.5rem
+  flex-shrink: 0
+
+.badge
+  display: inline-block
+  padding: 0.15rem 0.55rem
+  border-radius: 0.4rem
+  font-size: 1.1rem
+  background: rgba($primary, 0.1)
+  color: $primary
+
+  [data-theme="dark"] &
+    background: rgba($accent, 0.35)
+    color: $textLight
+
+.priceRow
+  @include flex(row, start, center)
+  gap: 0.8rem
+  flex-wrap: wrap
+
+  .select, .input
+    flex: 1
+    min-width: 10rem
+
+.empty
+  padding: 2rem
+  text-align: center
+  opacity: 0.55
+  font-size: 1.4rem
+
+.error
+  color: #c0392b
+  font-size: 1.3rem
+
+.ok
+  color: #27ae60
+  font-size: 1.4rem
+  padding: 0.8rem 1rem
+  border-radius: 0.8rem
+  background: rgba(#27ae60, 0.08)
+
+.loading
+  opacity: 0.6
+  font-size: 1.4rem
+
+.divider
+  height: 1px
+  background: rgba($primary, 0.1)
+  margin: 0.5rem 0

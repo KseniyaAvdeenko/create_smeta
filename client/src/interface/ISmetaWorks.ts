@@ -1,26 +1,35 @@
 export interface IWorkCategoryBase {
-    name: string
-}
-export interface IWorkCategory extends IWorkCategoryBase{
-    id: number
+    name: string;
 }
 
-export interface IMeasurement{
-    id: string
+export interface IWorkCategory extends IWorkCategoryBase {
+    id: number;
+    userId?: number;
+    works?: IWork[];
 }
 
-export interface IWorkMeasurement{
-    measurement:string,
-    cost: number
+export interface IMeasurement {
+    id: number;
+    shortName: string;
+    fullName?: string;
 }
 
-export interface IWorkBase{
+export interface IWorkMeasurement {
+    id?: number;
+    workId?: number;
+    measurementId: number;
+    cost: number;
+    measurement?: IMeasurement;
+}
+
+export interface IWorkBase {
     name: string;
     categoryId: number;
-    isDefault: boolean;
-    workMeasurements: IWorkMeasurement[]
+    workMeasurements?: IWorkMeasurement[];
 }
 
-export interface IWork extends IWorkBase{
-    id: number
+export interface IWork extends IWorkBase {
+    id: number;
+    userId?: number;
+    category?: IWorkCategory;
 }

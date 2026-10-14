@@ -47,6 +47,14 @@
     }
 
     new Preload().getConnections()
+
+    window.addEventListener('error', ({ error, message }) => {
+        window.electron?.captureRendererError(error?.message || message, error?.stack);
+    });
+
+    window.addEventListener('unhandledrejection', ({ reason }) => {
+        window.electron?.captureRendererError(reason?.message || String(reason), reason?.stack);
+    });
 </script>
 </body>
 </html>

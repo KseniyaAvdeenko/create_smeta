@@ -1,9 +1,16 @@
-const {DataTypes} = require('sequelize');
+const {DataTypes, Model} = require('sequelize');
 
-function defineOrderWork(sequelize) {
-    const OrderWork = sequelize.define(
-        'OrderWork',
-        {
+
+class OrderWork extends Model {
+    static associate(models) {
+        OrderWork.belongsTo(models.order, {as: 'order', foreignKey: 'orderId'})
+        OrderWork.belongsTo(models.work, {as: 'work', foreignKey: 'workId'})
+        OrderWork.hasMany(models.order_work_quantity, {as: 'orderWorkQuantities', foreignKey: 'orderWorkId'});
+    }
+}
+
+module.exports = (sequelize) => {
+    OrderWork.init({
             id: {
                 type: DataTypes.INTEGER,
                 autoIncrement: true,
@@ -12,29 +19,26 @@ function defineOrderWork(sequelize) {
             workId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                field: 'work_id',
             },
             orderId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                field: 'order_id',
             },
             total: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
-                field: 'total',
-                default: 0
+                defaultValue: 0,
             },
         },
         {
+            sequelize,
+            modelName: 'order_work',
             tableName: 'order_works',
             timestamps: false,
-        },
-    );
-
+        })
     return OrderWork;
-}
+};
 
-module.exports = defineOrderWork;
+
 
 
