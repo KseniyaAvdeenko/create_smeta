@@ -1,4 +1,4 @@
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {useAppSelector} from '../hooks/useAppSelector';
 import {login, register} from '../store/actions/auth.action';
@@ -11,6 +11,26 @@ const AuthPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginValue, setLoginValue] = useState('');
+    const [rememberLogin, setRememberLogin] = useState(false);
+
+    useEffect(() => {
+        if (needsRegister) return;
+
+        let isMounted = true;
+
+        window.electron.getRememberedLogin()
+            .then(credentials => {
+                if (!isMounted || !credentials) return;
+                setLoginValue(credentials.login);
+                setPassword(credentials.password);
+                setRememberLogin(true);
+            })
+            .catch(error => console.error('Не удалось загрузить сохранённые данные входа:', error));
+
+        return () => {
+            isMounted = false;
+        };
+    }, [needsRegister]);
 
     const onRegister = (e: FormEvent) => {
         e.preventDefault();
@@ -19,7 +39,7 @@ const AuthPage = () => {
 
     const onLogin = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(login(loginValue, password));
+        dispatch(login(loginValue, password, rememberLogin));
     };
 
     return (
@@ -75,6 +95,15 @@ const AuthPage = () => {
                             onChange={e => setPassword(e.target.value)}
                             required
                         />
+                        <label className={styles.rememberRow}>
+                            <input
+                                className={styles.rememberCheckbox}
+                                type="checkbox"
+                                checked={rememberLogin}
+                                onChange={e => setRememberLogin(e.target.checked)}
+                            />
+                            <span className={styles.rememberLabel}>Запомнить меня</span>
+                        </label>
                         <button className={styles.authButton} type="submit" disabled={isLoading}>
                             {isLoading ? '...' : 'Войти'}
                         </button>

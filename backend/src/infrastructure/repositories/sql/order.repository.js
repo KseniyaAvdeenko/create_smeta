@@ -23,6 +23,33 @@ class OrderRepository extends BaseRepository {
     this.User = UserModel;
   }
 
+  async createWithCatalog(data) {
+    const orderId = await this.model.sequelize.transaction(async (transaction) => {
+      const order = await this.model.create(data, { transaction });
+      const works = await this.Work.findAll({
+        where: { userId: data.createdBy },
+        transaction,
+      });
+
+      works.sort((a, b) => (a.categoryId - b.categoryId) || (a.id - b.id));
+
+      if (works.length) {
+        await this.OrderWork.bulkCreate(
+          works.map((work) => ({
+            workId: work.id,
+            orderId: order.id,
+            total: 0,
+          })),
+          { transaction },
+        );
+      }
+
+      return order.id;
+    });
+
+    return this.getOrderWithDetails(orderId);
+  }
+
   async getAllByUserId(userId) {
     return this.findAll(
       { createdBy: userId },

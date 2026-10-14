@@ -1,5 +1,6 @@
 const GoogleDriveClient = require('./googleDrive.service');
 const GoogleOAuthService = require('./oauth.service');
+const Sentry = require('@sentry/electron/main');
 
 const APP_FOLDER_NAME = 'Smeta';
 
@@ -113,12 +114,37 @@ class GdriveService {
     return message;
   }
 
+  _breadcrumb(message, data = {}) {
+    Sentry.addBreadcrumb({ category: 'gdrive', message, level: 'info', data });
+  }
+
+  _captureUploadError(error, context) {
+    const googleError = error?.response?.data?.error;
+    Sentry.withScope((scope) => {
+      scope.setTag('feature', 'gdrive-upload');
+      scope.setContext('gdrive', {
+        ...context,
+        httpStatus: error?.code ?? error?.response?.status ?? null,
+        reason: googleError?.errors?.[0]?.reason ?? error?.errors?.[0]?.reason ?? null,
+        googleMessage: googleError?.message ?? error?.message ?? null,
+      });
+      Sentry.captureException(error);
+    });
+  }
+
   async uploadExcel(userId, buffer, fileName) {
+    const context = { userId, fileName, bytes: buffer?.length ?? 0 };
     try {
+      this._breadcrumb('uploadExcel: start', context);
       const { client, defaultFolder } = await this._createDriveClient(userId);
+      this._breadcrumb('uploadExcel: client ready', { hasDefaultFolder: Boolean(defaultFolder) });
       const folderId = defaultFolder || (await this._ensureAppFolder(userId, client));
-      return await client.createExcelFileWithFallback(buffer, fileName, folderId);
+      this._breadcrumb('uploadExcel: target folder', { folderId });
+      const file = await client.createExcelFileWithFallback(buffer, fileName, folderId);
+      this._breadcrumb('uploadExcel: uploaded', { fileId: file?.id, name: file?.name });
+      return file;
     } catch (error) {
+      this._captureUploadError(error, { ...context, step: 'uploadExcel' });
       console.error('[GDrive] uploadExcel error:', error);
       throw new Error(this._formatUploadError(error));
     }

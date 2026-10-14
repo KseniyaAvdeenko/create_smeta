@@ -18,7 +18,9 @@ export const flattenOrderWorksForExcel = (orderWorks: IOrderWork[] = []): ExcelW
         const work = ow.work;
         if (!work) return [];
         const category = work.category?.name ?? 'Работы';
-        return (ow.orderWorkQuantities ?? []).map(q => ({
+        return (ow.orderWorkQuantities ?? [])
+            .filter(q => Number(q.quantity) > 0)
+            .map(q => ({
             categoryName: category,
             workName: work.name,
             measurement: q.measurement,

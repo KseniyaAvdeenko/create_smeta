@@ -158,7 +158,9 @@ class ExcelGenerationService {
     currentRow += 1;
     currentRow = this._addTableHeaders(worksheet, currentRow);
 
-    const aggregated = this._aggregateWorks(orderData.works || []);
+    const aggregated = this._aggregateWorks(orderData.works || []).filter(
+      (row) => (row.qtyM2 || 0) > 0 || (row.qtyLinear || 0) > 0,
+    );
     const worksByCategory = this._groupWorksByCategory(aggregated);
 
     let grandTotal = 0;

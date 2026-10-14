@@ -6,6 +6,7 @@ const registerGdriveHandlers = require('./handlers/gdrive.handler');
 const registerUserSettingsHandlers = require('./handlers/userSettings.handler');
 const registerCatalogHandlers = require('./handlers/catalog.handler');
 const registerOrderHandlers = require('./handlers/orders.handler');
+const rememberedCredentials = require('../services/rememberedCredentials.service');
 
 loadEnv();
 
@@ -14,7 +15,11 @@ function setIpcHandlers() {
   const authService = db.authServiceInstance();
 
   registerAppHandlers({ db });
-  registerAuthHandlers({ authService, userRepository: db.userRepository() });
+  registerAuthHandlers({
+    authService,
+    userRepository: db.userRepository(),
+    rememberedCredentials,
+  });
   registerGdriveHandlers({ authService, gdriveService: db.gdriveServiceInstance() });
   registerUserSettingsHandlers({
     authService,

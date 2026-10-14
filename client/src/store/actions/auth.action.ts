@@ -21,26 +21,34 @@ export const initAuth = () => async (dispatch: AppDispatch) => {
     }
 };
 
-export const login = (loginValue: string, password: string) => async (dispatch: AppDispatch) => {
-    try {
-        dispatch(authReducer.actions.authStart());
-        const result = await window.electron.login(loginValue, password);
-        if (!result.success || !result.user) {
-            dispatch(authReducer.actions.authFail(result.error || 'Ошибка входа'));
-            new NtfAction(dispatch).addNotification({
-                message: result.error || 'Ошибка входа',
-                type: 'error',
-            });
-            return;
+export const login =
+    (loginValue: string, password: string, rememberLogin = false) =>
+    async (dispatch: AppDispatch) => {
+        try {
+            dispatch(authReducer.actions.authStart());
+            const result = await window.electron.login(loginValue, password, rememberLogin);
+            if (!result.success || !result.user) {
+                dispatch(authReducer.actions.authFail(result.error || 'Ошибка входа'));
+                new NtfAction(dispatch).addNotification({
+                    message: result.error || 'Ошибка входа',
+                    type: 'error',
+                });
+                return;
+            }
+            dispatch(authReducer.actions.authSuccess(result.user));
+            dispatch(loadUserSettings());
+            new NtfAction(dispatch).addNotification({ message: 'Вход выполнен', type: 'success' });
+            if (result.rememberError) {
+                new NtfAction(dispatch).addNotification({
+                    message: result.rememberError,
+                    type: 'warning',
+                });
+            }
+        } catch (e) {
+            console.error(e);
+            dispatch(authReducer.actions.authFail('Ошибка входа'));
         }
-        dispatch(authReducer.actions.authSuccess(result.user));
-        dispatch(loadUserSettings());
-        new NtfAction(dispatch).addNotification({ message: 'Вход выполнен', type: 'success' });
-    } catch (e) {
-        console.error(e);
-        dispatch(authReducer.actions.authFail('Ошибка входа'));
-    }
-};
+    };
 
 export const register =
     (data: { username: string; email: string; password: string }) =>

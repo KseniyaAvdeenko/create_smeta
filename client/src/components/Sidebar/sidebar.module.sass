@@ -4,18 +4,25 @@
   width: 22rem
   flex-shrink: 0
   padding: 1.6rem 1.2rem
-  border-right: 1px solid rgba($primary, 0.08)
-  background: rgba($bgLight, 0.72)
+  border-right: 1px solid rgba($primary, 0.1)
+  background: linear-gradient(180deg, rgba($accent200, 0.35) 0%, rgba($bgLight, 0.9) 45%)
   backdrop-filter: blur(12px)
   @include flex(column, start, stretch)
   gap: 2rem
 
   [data-theme="dark"] &
-    background: rgba($bg200, 0.72)
+    background: linear-gradient(180deg, rgba($primary, 0.28) 0%, rgba($bg200, 0.92) 50%)
     border-color: rgba($primary200, 0.12)
 
 .brand
-  padding: 0.4rem 0.8rem 0.8rem
+  padding: 1.2rem 1.2rem 1.4rem
+  border-radius: 1.2rem
+  background: $primary
+  color: $textLight
+  box-shadow: 0 10px 24px rgba($primary, 0.25)
+
+  [data-theme="dark"] &
+    background: linear-gradient(135deg, $primary 0%, $accent 100%)
 
 .brandTitle
   font-size: 1.8rem
@@ -25,7 +32,7 @@
 .brandSub
   margin-top: 0.2rem
   font-size: 1.2rem
-  opacity: 0.55
+  opacity: 0.8
 
 .nav
   @include flex(column, start, stretch)
@@ -34,34 +41,36 @@
 .link
   text-decoration: none
   color: inherit
-  padding: 0.9rem 1rem
-  border-radius: 0.9rem
+  padding: 1rem 1.1rem
+  border-radius: 1rem
   font-size: 1.4rem
   font-weight: 500
   @include flex(row, start, center)
   gap: 1rem
   @include transition(all)
-  opacity: 0.82
+  opacity: 0.85
+  border: 1px solid transparent
 
   & > svg > path
     stroke: currentColor
 
   &:hover
     opacity: 1
-    background: rgba($accent200, 0.45)
+    background: rgba($accent200, 0.55)
+    border-color: rgba($primary, 0.12)
 
   [data-theme="dark"] &:hover
-    background: rgba($bg300, 0.55)
+    background: rgba($bg300, 0.6)
 
   &_active
     opacity: 1
-    background: $primary
+    background: linear-gradient(135deg, $primary 0%, $accent 100%)
     color: $textLight
-    box-shadow: 0 8px 20px rgba($primary, 0.22)
+    box-shadow: 0 10px 24px rgba($primary, 0.3)
 
     [data-theme="dark"] &
-      background: $accent
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25)
+      background: linear-gradient(135deg, $accent 0%, $primary200 100%)
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3)
 
     & > svg > path
       stroke: $textLight

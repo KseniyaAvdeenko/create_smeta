@@ -45,34 +45,42 @@ export const syncOrderWorkQuantities = (
     orderWorkId: number,
     rows: (QuantityInput & {id?: number})[],
     existing: IOrderWorkQuantity[] = [],
+    options?: {silent?: boolean},
 ) => async (dispatch: AppDispatch) => {
     try {
-        const keptIds = new Set(rows.filter(r => r.id).map(r => r.id));
+        const fresh = (await window.electron.getOrderWorkQuantitiesByOrderWorkId(orderWorkId)) as IOrderWorkQuantity[];
+        const existingRows = fresh?.length ? fresh : existing;
+        const active = rows.filter(r => r.measurement && r.quantity > 0);
+        const keptIds = new Set<number>();
 
-        for (const item of existing) {
+        for (const row of active) {
+            const match = existingRows.find(item => item.measurement === row.measurement);
+            if (match?.id) {
+                keptIds.add(match.id);
+                await window.electron.updateOrderWorkQuantity(match.id, {
+                    measurement: row.measurement,
+                    quantity: row.quantity,
+                });
+            } else {
+                const created = await window.electron.createOrderWorkQuantity({
+                    orderWorkId,
+                    measurement: row.measurement,
+                    quantity: row.quantity,
+                });
+                if (created?.id) keptIds.add(created.id);
+            }
+        }
+
+        for (const item of existingRows) {
             if (item.id && !keptIds.has(item.id)) {
                 await window.electron.deleteOrderWorkQuantity(item.id);
             }
         }
 
-        for (const row of rows) {
-            if (!row.measurement || row.quantity <= 0) continue;
-            if (row.id) {
-                await window.electron.updateOrderWorkQuantity(row.id, {
-                    measurement: row.measurement,
-                    quantity: row.quantity,
-                });
-            } else {
-                await window.electron.createOrderWorkQuantity({
-                    orderWorkId,
-                    measurement: row.measurement,
-                    quantity: row.quantity,
-                });
-            }
-        }
-
         dispatch(getOrderById(orderId));
-        new NtfAction(dispatch).addNotification({message: 'Объёмы сохранены', type: 'success'});
+        if (!options?.silent) {
+            new NtfAction(dispatch).addNotification({message: 'Объёмы сохранены', type: 'success'});
+        }
     } catch (e) {
         console.error(e);
         new NtfAction(dispatch).addNotification({message: 'Ошибка сохранения объёмов', type: 'error'});

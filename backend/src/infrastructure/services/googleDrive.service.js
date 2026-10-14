@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const { Readable } = require('stream');
+const Sentry = require('@sentry/electron/main');
 
 class GoogleDriveClient {
   /**
@@ -101,6 +102,16 @@ class GoogleDriveClient {
         if (!this._isPermissionError(error)) {
           throw error;
         }
+        Sentry.addBreadcrumb({
+          category: 'gdrive',
+          message: 'folder upload denied, fallback to Drive root',
+          level: 'warning',
+          data: {
+            folderId,
+            httpStatus: error?.code ?? error?.response?.status ?? null,
+            reason: error?.errors?.[0]?.reason ?? null,
+          },
+        });
         console.warn(
           `[GDrive] Нет доступа к папке ${folderId}, загрузка в корень Drive:`,
           error.message,

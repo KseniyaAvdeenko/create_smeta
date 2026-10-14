@@ -1,68 +1,103 @@
-import React, {FormEvent, useEffect, useMemo, useState} from 'react';
+import React, {FormEvent, useEffect, useMemo, useRef, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import styles from './pages.module.sass';
 import {useAppDispatch} from '../hooks/useAppDispatch';
 import {useAppSelector} from '../hooks/useAppSelector';
 import {deleteOrder, getOrderById, updateOrder} from '../store/actions/order.action';
-import {getWorks} from '../store/actions/work.action';
-import {
-    addOrderWorkWithQuantities,
-    deleteOrderWork,
-    updateOrderWorkWithQuantities,
-} from '../store/actions/orderWork.action';
+import {updateOrderWorkWithQuantities} from '../store/actions/orderWork.action';
 import {deleteOrderFile, generateOrderFile} from '../store/actions/orderFile.action';
 import {getGdriveStatus} from '../store/actions/gdrive.action';
 import {IOrderWork} from '../interface/ISmetaOrders';
 import {formatMoney} from '../utils/currency';
 
-type QtyRow = {key: string; id?: number; measurement: string; quantity: string};
+const isSquare = (unit: string) => {
+    const u = unit.toLowerCase().replace(/\s/g, '').replace(/²/g, '2').replace(/\./g, '');
+    return u === 'м2' || u === 'm2' || u.includes('кв');
+};
+
+const isLinear = (unit: string) => {
+    const u = unit.toLowerCase().replace(/\s/g, '').replace(/\./g, '');
+    return u === 'мп' || u === 'mp' || u.includes('пог');
+};
+
+const priceOf = (ow: IOrderWork, match: (unit: string) => boolean) =>
+    ow.work?.workMeasurements?.find(wm => match(wm.measurement?.shortName ?? ''))?.cost ?? null;
+
+const unitOf = (ow: IOrderWork, match: (unit: string) => boolean) =>
+    ow.work?.workMeasurements?.find(wm => match(wm.measurement?.shortName ?? ''))?.measurement?.shortName ?? '';
+
+const draftKey = (orderWorkId: number, unit: string) => `${orderWorkId}:${unit}`;
+
+const parseQty = (raw: string) => {
+    const trimmed = raw.trim().replace(',', '.');
+    if (!trimmed) return 0;
+    const value = Number(trimmed);
+    return Number.isNaN(value) || value <= 0 ? 0 : value;
+};
+
+const lineTotal = (ow: IOrderWork, draft: Record<string, string>) => {
+    const m2Unit = unitOf(ow, isSquare);
+    const mpUnit = unitOf(ow, isLinear);
+    const m2 = m2Unit ? parseQty(draft[draftKey(ow.id, m2Unit)] ?? '') : 0;
+    const mp = mpUnit ? parseQty(draft[draftKey(ow.id, mpUnit)] ?? '') : 0;
+    const priceM2 = priceOf(ow, isSquare) ?? 0;
+    const priceMp = priceOf(ow, isLinear) ?? 0;
+    return m2 * priceM2 + mp * priceMp;
+};
 
 const EstimateDetail = () => {
     const {id} = useParams();
     const orderId = Number(id);
     const dispatch = useAppDispatch();
     const {order, isUpdating} = useAppSelector(state => state.ordersReducer);
-    const {works} = useAppSelector(state => state.worksReducer);
     const {isCreating: isGenerating} = useAppSelector(state => state.orderFilesReducer);
     const {status: gdriveStatus, isLoading: isGdriveLoading} = useAppSelector(state => state.gdriveReducer);
 
     const [name, setName] = useState('');
     const [client, setClient] = useState('');
-    const [workId, setWorkId] = useState(0);
-    const [qtyRows, setQtyRows] = useState<QtyRow[]>([]);
-    const [editWorkId, setEditWorkId] = useState<number | null>(null);
+    const [draft, setDraft] = useState<Record<string, string>>({});
+    const hydratedFor = useRef<number | null>(null);
 
     useEffect(() => {
         if (!orderId) return;
         dispatch(getOrderById(orderId));
-        dispatch(getWorks());
         dispatch(getGdriveStatus());
     }, [dispatch, orderId]);
 
     useEffect(() => {
-        if (!order) return;
+        if (!order || order.id !== orderId) return;
         setName(order.name);
         setClient(order.client ?? '');
+        if (hydratedFor.current === order.id) return;
+        hydratedFor.current = order.id;
+        const next: Record<string, string> = {};
+        for (const ow of order.orderWorks ?? []) {
+            for (const q of ow.orderWorkQuantities ?? []) {
+                next[draftKey(ow.id, q.measurement)] = String(q.quantity);
+            }
+        }
+        setDraft(next);
+    }, [order, orderId]);
+
+    const groups = useMemo(() => {
+        const map = new Map<string, IOrderWork[]>();
+        const works = [...(order?.orderWorks ?? [])].sort((a, b) => {
+            const cat = (a.work?.categoryId ?? 0) - (b.work?.categoryId ?? 0);
+            return cat || a.id - b.id;
+        });
+        for (const ow of works) {
+            const category = ow.work?.category?.name ?? 'Прочие работы';
+            const list = map.get(category) ?? [];
+            list.push(ow);
+            map.set(category, list);
+        }
+        return [...map.entries()];
     }, [order]);
 
-    const selectedWork = useMemo(
-        () => works?.find(w => w.id === workId) ?? null,
-        [works, workId],
+    const grandTotal = useMemo(
+        () => (order?.orderWorks ?? []).reduce((sum, ow) => sum + lineTotal(ow, draft), 0),
+        [order, draft],
     );
-
-    useEffect(() => {
-        if (!selectedWork) {
-            setQtyRows([]);
-            return;
-        }
-        setQtyRows(
-            (selectedWork.workMeasurements ?? []).map(wm => ({
-                key: String(wm.id ?? wm.measurementId),
-                measurement: wm.measurement?.shortName ?? '',
-                quantity: '',
-            })),
-        );
-    }, [selectedWork]);
 
     const onSaveOrder = (e: FormEvent) => {
         e.preventDefault();
@@ -70,54 +105,28 @@ const EstimateDetail = () => {
         dispatch(updateOrder(order.id, {name: name.trim(), client: client.trim() || undefined}));
     };
 
-    const onAddWork = (e: FormEvent) => {
-        e.preventDefault();
-        if (!order || !selectedWork) return;
-        const rows = qtyRows
-            .filter(r => r.measurement && r.quantity.trim())
-            .map(r => ({measurement: r.measurement, quantity: Number(r.quantity)}))
-            .filter(r => !Number.isNaN(r.quantity) && r.quantity > 0);
-        if (!rows.length) return;
-        dispatch(addOrderWorkWithQuantities(order.id, selectedWork, rows));
-        setWorkId(0);
+    const setQty = (ow: IOrderWork, unit: string, value: string) => {
+        setDraft(prev => ({...prev, [draftKey(ow.id, unit)]: value}));
     };
 
-    const startEditWork = (ow: IOrderWork) => {
-        setEditWorkId(ow.id);
-    };
-
-    const onSaveEditWork = (ow: IOrderWork) => {
+    const saveWork = (ow: IOrderWork) => {
         if (!order) return;
-        const rows = qtyRows
-            .filter(r => r.measurement && r.quantity.trim())
-            .map(r => ({
-                id: r.id,
-                measurement: r.measurement,
-                quantity: Number(r.quantity),
-            }))
-            .filter(r => !Number.isNaN(r.quantity) && r.quantity > 0);
-        dispatch(updateOrderWorkWithQuantities(order.id, ow, rows));
-        setEditWorkId(null);
-        setQtyRows([]);
-    };
-
-    const openEditRows = (ow: IOrderWork) => {
-        startEditWork(ow);
-        setQtyRows(
-            (ow.orderWorkQuantities ?? []).map(q => ({
-                key: String(q.id ?? q.measurement),
-                id: q.id,
-                measurement: q.measurement,
-                quantity: String(q.quantity),
-            })),
-        );
-    };
-
-    const formatWorkLine = (ow: IOrderWork) => {
-        const workName = ow.work?.name ?? `#${ow.workId}`;
-        const qty =
-            ow.orderWorkQuantities?.map(q => `${q.measurement}: ${q.quantity}`).join(', ') || '—';
-        return `${workName} (${qty}) — ${formatMoney(ow.total ?? 0)}`;
+        const units = [unitOf(ow, isSquare), unitOf(ow, isLinear)].filter(Boolean);
+        const rows = units.map(unit => {
+            const existing = ow.orderWorkQuantities?.find(q => q.measurement === unit);
+            return {
+                id: existing?.id,
+                measurement: unit,
+                quantity: parseQty(draft[draftKey(ow.id, unit)] ?? ''),
+            };
+        });
+        const same = rows.every(row => {
+            const prev = ow.orderWorkQuantities?.find(q => q.measurement === row.measurement);
+            const prevQty = prev ? Number(prev.quantity) : 0;
+            return prevQty === row.quantity;
+        });
+        if (same) return;
+        dispatch(updateOrderWorkWithQuantities(order.id, ow, rows, {silent: true}));
     };
 
     if (!orderId) {
@@ -139,13 +148,15 @@ const EstimateDetail = () => {
                     ← К списку смет
                 </Link>
                 <h1 className={styles.pageTitle}>{order.name}</h1>
-                <p className={styles.pageSubtitle}>Редактирование позиций и выгрузка файла</p>
+                <p className={styles.pageSubtitle}>
+                    Каталог уже в смете. Пустые объёмы в Excel не попадают
+                </p>
             </header>
 
             <div className={styles.stack}>
                 <section className={styles.panel}>
                     <h3 className={styles.sectionTitle}>Основное</h3>
-                    <form className={styles.inlineForm} onSubmit={onSaveOrder}>
+                    <form className={styles.metaForm} onSubmit={onSaveOrder}>
                         <input
                             className={styles.input}
                             value={name}
@@ -168,140 +179,102 @@ const EstimateDetail = () => {
                                 if (window.confirm('Удалить смету?')) dispatch(deleteOrder(order.id));
                             }}
                         >
-                            Удалить смету
+                            Удалить
                         </button>
                     </form>
                 </section>
 
                 <section className={styles.panel}>
                     <h3 className={styles.sectionTitle}>Работы</h3>
-
-                    {editWorkId ? (
-                        <div className={styles.inlineForm}>
-                            {qtyRows.map(row => (
-                                <div key={row.key} className={styles.qtyRow}>
-                                    <span className={styles.qtyLabel}>{row.measurement}</span>
-                                    <input
-                                        className={styles.input}
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        value={row.quantity}
-                                        onChange={e =>
-                                            setQtyRows(prev =>
-                                                prev.map(r =>
-                                                    r.key === row.key
-                                                        ? {...r, quantity: e.target.value}
-                                                        : r,
-                                                ),
-                                            )
-                                        }
-                                    />
-                                </div>
-                            ))}
-                            <div className={styles.inlineActions}>
-                                <button
-                                    className={styles.btn}
-                                    type="button"
-                                    onClick={() => {
-                                        const ow = order.orderWorks?.find(w => w.id === editWorkId);
-                                        if (ow) onSaveEditWork(ow);
-                                    }}
-                                >
-                                    Сохранить объёмы
-                                </button>
-                                <button
-                                    className={styles.btnGhost}
-                                    type="button"
-                                    onClick={() => setEditWorkId(null)}
-                                >
-                                    Отмена
-                                </button>
-                            </div>
-                        </div>
+                    {!groups.length ? (
+                        <p className={styles.empty}>В каталоге нет работ — смета пустая</p>
                     ) : (
-                        <>
-                            <form className={styles.inlineForm} onSubmit={onAddWork}>
-                                <select
-                                    className={styles.select}
-                                    value={workId || ''}
-                                    onChange={e => setWorkId(Number(e.target.value))}
-                                >
-                                    <option value="">Выбери работу</option>
-                                    {(works ?? []).map(w => (
-                                        <option key={w.id} value={w.id}>
-                                            {w.name}
-                                            {w.category?.name ? ` (${w.category.name})` : ''}
-                                        </option>
-                                    ))}
-                                </select>
-                                {selectedWork &&
-                                    qtyRows.map(row => (
-                                        <div key={row.key} className={styles.qtyRow}>
-                                            <span className={styles.qtyLabel}>{row.measurement}</span>
-                                            <input
-                                                className={styles.input}
-                                                type="number"
-                                                min="0"
-                                                step="0.01"
-                                                placeholder="Кол-во"
-                                                value={row.quantity}
-                                                onChange={e =>
-                                                    setQtyRows(prev =>
-                                                        prev.map(r =>
-                                                            r.key === row.key
-                                                                ? {...r, quantity: e.target.value}
-                                                                : r,
-                                                        ),
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    ))}
-                                <button
-                                    className={styles.btn}
-                                    type="submit"
-                                    disabled={!selectedWork}
-                                >
-                                    Добавить работу
-                                </button>
-                            </form>
-
-                            <ul className={styles.list}>
-                                {(order.orderWorks ?? []).map(ow => (
-                                    <li key={ow.id} className={styles.listItem}>
-                                        <div className={styles.listItemMeta}>{formatWorkLine(ow)}</div>
-                                        <div className={styles.inlineActions}>
-                                            <button
-                                                className={styles.btnGhost}
-                                                type="button"
-                                                onClick={() => openEditRows(ow)}
-                                            >
-                                                Объёмы
-                                            </button>
-                                            <button
-                                                className={styles.btnDanger}
-                                                type="button"
-                                                onClick={() =>
-                                                    dispatch(deleteOrderWork(ow.id, order.id))
-                                                }
-                                            >
-                                                Удалить
-                                            </button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                            {!order.orderWorks?.length && (
-                                <p className={styles.empty}>Работ в смете пока нет</p>
-                            )}
-                        </>
+                        groups.map(([category, works]) => {
+                            const categorySum = works.reduce((sum, ow) => sum + lineTotal(ow, draft), 0);
+                            return (
+                                <div key={category} className={styles.categoryBlock}>
+                                    <div className={styles.categoryHead}>
+                                        <h4 className={styles.categoryTitle}>{category}</h4>
+                                        <span className={styles.categorySum}>{formatMoney(categorySum)}</span>
+                                    </div>
+                                    <table className={styles.sheet}>
+                                        <thead>
+                                            <tr>
+                                                <th className={styles.numCell}>№</th>
+                                                <th>Работа</th>
+                                                <th>м²</th>
+                                                <th>цена м²</th>
+                                                <th>м.п.</th>
+                                                <th>цена м.п.</th>
+                                                <th>Сумма</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {works.map((ow, index) => {
+                                                const m2 = unitOf(ow, isSquare);
+                                                const mp = unitOf(ow, isLinear);
+                                                const priceM2 = priceOf(ow, isSquare);
+                                                const priceMp = priceOf(ow, isLinear);
+                                                return (
+                                                    <tr key={ow.id}>
+                                                        <td className={styles.numCell}>{index + 1}</td>
+                                                        <td className={styles.nameCell}>{ow.work?.name ?? `#${ow.workId}`}</td>
+                                                        <td>
+                                                            {m2 ? (
+                                                                <input
+                                                                    className={styles.qtyInput}
+                                                                    type="number"
+                                                                    min="0"
+                                                                    step="0.01"
+                                                                    placeholder="—"
+                                                                    value={draft[draftKey(ow.id, m2)] ?? ''}
+                                                                    onChange={e => setQty(ow, m2, e.target.value)}
+                                                                    onBlur={() => saveWork(ow)}
+                                                                />
+                                                            ) : (
+                                                                <span className={styles.dash}>—</span>
+                                                            )}
+                                                        </td>
+                                                        <td className={styles.moneyCell}>
+                                                            {priceM2 == null ? '—' : formatMoney(priceM2)}
+                                                        </td>
+                                                        <td>
+                                                            {mp ? (
+                                                                <input
+                                                                    className={styles.qtyInput}
+                                                                    type="number"
+                                                                    min="0"
+                                                                    step="0.01"
+                                                                    placeholder="—"
+                                                                    value={draft[draftKey(ow.id, mp)] ?? ''}
+                                                                    onChange={e => setQty(ow, mp, e.target.value)}
+                                                                    onBlur={() => saveWork(ow)}
+                                                                />
+                                                            ) : (
+                                                                <span className={styles.dash}>—</span>
+                                                            )}
+                                                        </td>
+                                                        <td className={styles.moneyCell}>
+                                                            {priceMp == null ? '—' : formatMoney(priceMp)}
+                                                        </td>
+                                                        <td className={styles.moneyCell}>{formatMoney(lineTotal(ow, draft))}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            );
+                        })
                     )}
+                    <div className={styles.grandTotal}>
+                        <span>Итого</span>
+                        <span>{formatMoney(grandTotal)}</span>
+                    </div>
                 </section>
 
                 <section className={styles.panel}>
                     <h3 className={styles.sectionTitle}>Файлы</h3>
-
                     <div className={styles.filesSection}>
                         {isGdriveLoading ? (
                             <p className={styles.hint}>Проверка Google Drive...</p>
@@ -310,9 +283,7 @@ const EstimateDetail = () => {
                                 Подключи Google Drive в настройках для выгрузки Excel
                             </p>
                         ) : gdriveStatus?.connected ? (
-                            <p className={styles.ok}>
-                                Google Drive: {gdriveStatus.email}
-                            </p>
+                            <p className={styles.ok}>Google Drive: {gdriveStatus.email}</p>
                         ) : null}
 
                         <div className={styles.inlineActions}>

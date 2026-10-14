@@ -175,6 +175,32 @@
   @include flex(column, start, stretch)
   gap: 0.6rem
 
+.workGroups
+  @include flex(column, start, stretch)
+  gap: 1.8rem
+
+.workGroup
+  @include flex(column, start, stretch)
+  gap: 0.8rem
+
+.workGroupHeader
+  @include flex(row, space-between, center)
+  gap: 1rem
+  padding-bottom: 0.5rem
+  border-bottom: 1px solid rgba($primary, 0.14)
+
+  [data-theme="dark"] &
+    border-color: rgba($primary200, 0.18)
+
+.workGroupTitle
+  margin: 0
+  font-size: 1.5rem
+  font-weight: 600
+
+.workGroupCount
+  font-size: 1.2rem
+  opacity: 0.62
+
 .listItem
   @include flex(row, space-between, center)
   gap: 1rem

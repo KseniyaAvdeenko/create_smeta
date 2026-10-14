@@ -20,7 +20,7 @@ function registerOrderHandlers({
 
   handleIpc('orders:create', async (_, orderData) => {
     const user = requireAuth(authService);
-    return orderRepo.create({ ...orderData, createdBy: user.id });
+    return orderRepo.createWithCatalog({ ...orderData, createdBy: user.id });
   });
 
   handleIpc('orders:update', async (_, id, updateData) => {

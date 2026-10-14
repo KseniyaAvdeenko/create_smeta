@@ -124,6 +124,7 @@ export const updateOrderWorkWithQuantities = (
     orderId: number,
     orderWork: IOrderWork,
     rows: {id?: number; measurement: string; quantity: number}[],
+    options?: {silent?: boolean},
 ) => async (dispatch: AppDispatch) => {
     try {
         const quantities: IOrderWorkQuantity[] = rows
@@ -136,7 +137,13 @@ export const updateOrderWorkWithQuantities = (
             total,
         });
         await dispatch(
-            syncOrderWorkQuantities(orderId, orderWork.id, rows, orderWork.orderWorkQuantities ?? []),
+            syncOrderWorkQuantities(
+                orderId,
+                orderWork.id,
+                rows,
+                orderWork.orderWorkQuantities ?? [],
+                options,
+            ),
         );
     } catch (e) {
         console.error(e);

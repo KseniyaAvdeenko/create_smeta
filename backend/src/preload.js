@@ -12,7 +12,9 @@ contextBridge.exposeInMainWorld('electron', {
   isOnline: () => ipcRenderer.invoke('connected'),
   dbConnection: () => ipcRenderer.invoke('db:connection'),
 
-  login: (login, password) => ipcRenderer.invoke('auth:login', { login, password }),
+  login: (login, password, rememberLogin) =>
+    ipcRenderer.invoke('auth:login', { login, password, rememberLogin }),
+  getRememberedLogin: () => ipcRenderer.invoke('auth:remembered-login'),
   logout: () => ipcRenderer.invoke('auth:logout'),
   getCurrentUser: () => ipcRenderer.invoke('auth:me'),
   getProfile: () => ipcRenderer.invoke('auth:profile'),

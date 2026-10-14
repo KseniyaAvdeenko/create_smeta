@@ -13,6 +13,12 @@ export type AuthResult = {
     success: boolean;
     user?: AuthUser;
     error?: string;
+    rememberError?: string;
+};
+
+export type RememberedLogin = {
+    login: string;
+    password: string;
 };
 
 export type GdriveStatus = {
@@ -41,7 +47,8 @@ export type ElectronApi = {
     initial: () => Promise<boolean>;
     isOnline: () => Promise<boolean>;
     dbConnection: () => Promise<boolean>;
-    login: (login: string, password: string) => Promise<AuthResult>;
+    login: (login: string, password: string, rememberLogin?: boolean) => Promise<AuthResult>;
+    getRememberedLogin: () => Promise<RememberedLogin | null>;
     logout: () => Promise<{ success: boolean }>;
     getCurrentUser: () => Promise<AuthUser | null>;
     getProfile: () => Promise<AuthUser | null>;

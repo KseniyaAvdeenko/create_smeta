@@ -34,17 +34,30 @@ const WorksPanel = () => {
     const [priceRows, setPriceRows] = useState<PriceRow[]>([emptyRow()]);
     const [filterCategoryId, setFilterCategoryId] = useState<number>(0);
 
-    const categoryMap = useMemo(() => {
-        const map = new Map<number, string>();
-        workCategories?.forEach(c => map.set(c.id, c.name));
-        return map;
-    }, [workCategories]);
-
     const filteredWorks = useMemo(() => {
         if (!works) return [];
         if (!filterCategoryId) return works;
         return works.filter(w => w.categoryId === filterCategoryId);
     }, [works, filterCategoryId]);
+
+    const groupedWorks = useMemo(() => {
+        const categories = (workCategories ?? [])
+            .filter(category => !filterCategoryId || category.id === filterCategoryId)
+            .map(category => ({
+                id: category.id,
+                name: category.name,
+                works: filteredWorks.filter(work => work.categoryId === category.id),
+            }));
+        const uncategorizedWorks = filteredWorks.filter(
+            work => !workCategories?.some(category => category.id === work.categoryId),
+        );
+
+        if (uncategorizedWorks.length) {
+            categories.push({id: 0, name: 'Без категории', works: uncategorizedWorks});
+        }
+
+        return categories.filter(category => category.works.length > 0);
+    }, [workCategories, filteredWorks, filterCategoryId]);
 
     const resetForm = () => {
         setShowForm(false);
@@ -273,37 +286,45 @@ const WorksPanel = () => {
                     ) : !filteredWorks.length ? (
                         <p className={styles.empty}>Работ пока нет</p>
                     ) : (
-                        <div className={styles.list}>
-                            {filteredWorks.map(work => (
-                                <div key={work.id} className={styles.listItem}>
-                                    <div className={styles.listItemMain}>
-                                        <span className={styles.listItemTitle}>{work.name}</span>
-                                        <span className={styles.listItemMeta}>
-                                            <span className={styles.badge}>
-                                                {categoryMap.get(work.categoryId) ?? '—'}
-                                            </span>
-                                            {' · '}
-                                            {formatPrices(work.workMeasurements)}
+                        <div className={styles.workGroups}>
+                            {groupedWorks.map(group => (
+                                <section className={styles.workGroup} key={group.id || 'uncategorized'}>
+                                    <div className={styles.workGroupHeader}>
+                                        <h4 className={styles.workGroupTitle}>{group.name}</h4>
+                                        <span className={styles.workGroupCount}>
+                                            {group.works.length} {group.works.length === 1 ? 'работа' : 'работ'}
                                         </span>
                                     </div>
-                                    <div className={styles.listItemActions}>
-                                        <button
-                                            className={`${styles.btnGhost} ${styles.btnSmall}`}
-                                            type="button"
-                                            onClick={() => openEdit(work)}
-                                        >
-                                            Изменить
-                                        </button>
-                                        <button
-                                            className={`${styles.btnDanger} ${styles.btnSmall}`}
-                                            type="button"
-                                            disabled={isDeleting}
-                                            onClick={() => onDelete(work.id, work.name)}
-                                        >
-                                            Удалить
-                                        </button>
+                                    <div className={styles.list}>
+                                        {group.works.map(work => (
+                                            <div key={work.id} className={styles.listItem}>
+                                                <div className={styles.listItemMain}>
+                                                    <span className={styles.listItemTitle}>{work.name}</span>
+                                                    <span className={styles.listItemMeta}>
+                                                        {formatPrices(work.workMeasurements)}
+                                                    </span>
+                                                </div>
+                                                <div className={styles.listItemActions}>
+                                                    <button
+                                                        className={`${styles.btnGhost} ${styles.btnSmall}`}
+                                                        type="button"
+                                                        onClick={() => openEdit(work)}
+                                                    >
+                                                        Изменить
+                                                    </button>
+                                                    <button
+                                                        className={`${styles.btnDanger} ${styles.btnSmall}`}
+                                                        type="button"
+                                                        disabled={isDeleting}
+                                                        onClick={() => onDelete(work.id, work.name)}
+                                                    >
+                                                        Удалить
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
+                                </section>
                             ))}
                         </div>
                     )}
